@@ -26,7 +26,20 @@ $app = new Illuminate\Foundation\Application;
 
 $env = $app->detectEnvironment(function()
 {
-	return getenv('APP_ENV') ?: 'local';
+    $environment = getenv('environment');
+    if (strlen($environment) == 0) {
+        if (strpos(__DIR__, '/home/forge/' . 'dev.tipszonen.se') === 0) {
+            $environment = 'development';
+        } elseif (strpos(__DIR__, '/home/forge/mysite.com') === 0) {
+            $environment = 'production';
+        }
+    }
+    if (strlen($environment) == 0) {
+        $environment = 'local';
+    }
+
+    return $environment;
+
 });
 
 /*
