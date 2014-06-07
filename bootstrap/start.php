@@ -26,7 +26,7 @@ $app = new Illuminate\Foundation\Application;
 
 $env = $app->detectEnvironment(function()
 {
-    $environment = getenv('environment');
+    $environment = getenv('APP_ENV');
     if (strlen($environment) == 0) {
         if (strpos(__DIR__, '/home/forge/' . 'dev.tipszonen.se') === 0) {
             $environment = 'development';
