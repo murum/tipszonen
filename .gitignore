@@ -9,4 +9,4 @@ Thumbs.db
 .env.local.php
 /public/components
 /node_modules
-/.idea
+.idea
