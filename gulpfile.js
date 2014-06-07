@@ -12,14 +12,13 @@ var gulp = require('gulp');
 var gutil = require('gulp-util');
 var notify = require('gulp-notify');
 var less = require('gulp-less');
+var concat = require('gulp-concat');
+var uglify = require('gulp-uglify');
 var autoprefix = require('gulp-autoprefixer');
 var coffee = require('gulp-coffee');
 var phpunit = require('gulp-phpunit');//notify requires >= v 0.0.3
 var fs = require('fs'); //only used for icon file with growlNotifier
 var imagemin = require('gulp-imagemin');
-
-// livereload
-var livereload = require('gulp-livereload');
 
 //CSS directories
 var lessDir = 'app/assets/less';
@@ -29,9 +28,6 @@ var targetCSSDir = 'public/css';
 var coffeeDir = 'app/assets/coffee';
 var targetJSDir = 'public/js';
 
-// blade directory
-var bladeDir = 'app/views';
-
 // Tasks
 /* less compile */
 gulp.task('less', function() {
@@ -39,25 +35,16 @@ gulp.task('less', function() {
         .pipe(less({compress: true}).on('error', gutil.log))
         .pipe(autoprefix('last 10 versions'))
         .pipe(gulp.dest(targetCSSDir))
-        .pipe(livereload())
         .pipe(notify('CSS compiled, prefixed, and minified.'));
-
-    //growlNotifier for windows
-    //.pipe(notify({title: 'CSS Compiled', message: 'compiled, prefixed, and minified.', notifier: growlNotifier}));
 });
 
 /* coffee compile */
 gulp.task('coffee', function() {
     return gulp.src(coffeeDir + '/**/*.coffee')
         .pipe(coffee().on('error', gutil.log))
+        .pipe(concat('min.js'))
+        .pipe(uglify())
         .pipe(gulp.dest(targetJSDir))
-        .pipe(livereload())
-});
-
-/* Blade Templates */
-gulp.task('blade', function() {
-    return gulp.src(bladeDir + '/**/*.blade.php')
-        .pipe(livereload());
 });
 
 gulp.task('images', function () {
@@ -89,7 +76,6 @@ gulp.task('phpunit', function() {
 
 /* Watcher */
 gulp.task('watch', function() {
-    gulp.watch(bladeDir + '/**/*.blade.php', ['blade']);
     gulp.watch(lessDir + '/**/*.less', ['less']);
     gulp.watch(coffeeDir + '/**/*.coffee', ['coffee']);
     gulp.watch('images-orig/**', ['images']);

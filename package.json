@@ -10,6 +10,8 @@
     "gulp-livereload": "~2.0.0",
     "fs": "0.0.1",
     "gulp-less": "~1.2.3",
-    "gulp-imagemin": "~0.6.0"
-  },
+    "gulp-imagemin": "~0.6.0",
+    "gulp-concat": "~2.2.0",
+    "gulp-uglify": "~0.3.0"
+  }
 }
