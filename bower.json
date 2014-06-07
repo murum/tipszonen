@@ -2,6 +2,7 @@
   "name": "tipszonen",
   "dependencies": {
     "jquery": "~2.1.1",
-    "chart.js": "~0.1.0"
+    "chart.js": "~0.1.0",
+    "bootstrap": "~3.1.1"
   }
 }
