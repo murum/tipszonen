@@ -55,7 +55,7 @@ return array(
 		'mysql' => array(
 			'driver'    => 'mysql',
 			'host'      => $_ENV['DB_HOST'],
-			'database'  => 'tipszonen',
+			'database'  => $_ENV['DB_NAME'],
 			'username'  => $_ENV['DB_USERNAME'],
 			'password'  => $_ENV['DB_PASSWORD'],
 			'charset'   => 'utf8',
