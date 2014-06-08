@@ -32,17 +32,17 @@ class User extends BaseModel implements UserInterface, RemindableInterface {
         'username' => 'required|alpha_num|min:3|unique:users',
         'email' => 'required|email|unique:users|confirmed',
         'email_confirmation' => 'required|email',
-        'password' => 'required|min:6',
+        'password' => 'required|confirmed|min:6',
+        'password_confirmation' => 'required|email',
     ];
 
     public static function boot()
     {
         parent::boot();
 
-        static::saving(function($model)
+        static::created(function($model)
         {
             $model->register_ip = get_ip();
-
             return $model->validate();
         });
     }

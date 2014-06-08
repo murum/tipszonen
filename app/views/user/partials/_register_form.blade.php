@@ -33,6 +33,14 @@
 
 <div class="form-group">
     <div class="col-xs-12">
+        {{ Form::label('password_confirmation', 'Lösenord igen', ['class' => 'control-label']) }}
+        {{ Form::password('password_confirmation', ['class' => 'form-control']) }}
+        {{ $errors->first('password_confirmation', '<span class="text-danger">:message</span>') }}
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-xs-12">
         {{ Form::submit('Registrera dig', ['class' => 'btn btn-success']) }}
     </div>
 </div>

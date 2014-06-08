@@ -17,6 +17,7 @@ class BaseModel extends Eloquent {
     {
         $validation = Validator::make($this->getAttributes(), static::$rules);
 
+
         if($validation->fails())
         {
             $this->errors = $validation->messages();

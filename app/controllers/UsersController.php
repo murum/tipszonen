@@ -29,7 +29,13 @@ class UsersController extends \BaseController {
 	 */
 	public function store()
 	{
-        $user = new User(Input::all());
+        $user = new User(Input::only([
+            'username',
+            'email',
+            'email_confirmation',
+            'password',
+            'password_confirmation'
+        ]));
 
         if( ! $user->save() )
         {
