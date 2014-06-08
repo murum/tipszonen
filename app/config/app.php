@@ -123,6 +123,7 @@ return array(
 		'Illuminate\Workbench\WorkbenchServiceProvider',
         'Artdarek\OAuth\OAuthServiceProvider',
         'Barryvdh\Debugbar\ServiceProvider',
+        'Tipszonen\Notifications\FlashServiceProvider',
     ),
 
 	/*
@@ -190,6 +191,7 @@ return array(
 		'Validator'       => 'Illuminate\Support\Facades\Validator',
 		'View'            => 'Illuminate\Support\Facades\View',
         'OAuth'           => 'Artdarek\OAuth\Facade\OAuth',
+        'Flash'           => 'Tipszonen\Notifications\Flash',
 
 	),
 

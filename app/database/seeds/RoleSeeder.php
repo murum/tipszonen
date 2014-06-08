@@ -4,7 +4,6 @@
 class RoleSeeder extends Seeder{
     public function run()
     {
-        DB::table('role_user')->delete();
         DB::table('users')->delete();
         DB::table('roles')->delete();
 

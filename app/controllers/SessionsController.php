@@ -16,14 +16,17 @@ class SessionsController extends BaseController {
 
         if ( $attempt )
         {
+            Flash::success('Du loggades in');
             return Redirect::intended('/');
         }
 
+        Flash::error('Felaktiga inloggningsuppgifter, vänligen försök igen');
         return Redirect::route('login')->withInput();
     }
 
     public function destroy()
     {
+        Flash::success('Du loggades ut.');
         Auth::logout();
 
         return Redirect::route('login');
@@ -56,6 +59,7 @@ class SessionsController extends BaseController {
 
             if( $user )
             {
+                Flash::success('Du loggades in.');
                 Auth::login($user);
             } else
             {
@@ -63,12 +67,15 @@ class SessionsController extends BaseController {
                 $user->username = slugify($result['name']);
                 $user->email = $result['email'];
                 $user->facebook_id = $result['id'];
-                $user->register_ip = get_ip();
-                $user->save();
-
-                Auth::login($user);
+                if( ! $user->save() )
+                {
+                    return Redirect::route('register')->withErrors($user->getErrors());
+                } else
+                {
+                    Flash::success('Du loggades in och ett konto skapades.');
+                    Auth::login($user);
+                }
             }
-
             return Redirect::home();
 
         }

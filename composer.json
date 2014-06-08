@@ -21,6 +21,9 @@
 			"app/database/seeds",
 			"app/tests/TestCase.php"
 		],
+        "psr-4": {
+            "Tipszonen\\": "app/Tipszonen"
+        },
         "files": [
             "app/helpers.php"
         ]

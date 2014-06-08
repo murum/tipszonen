@@ -8,6 +8,8 @@
 <body>
     @include('layout.includes.nav')
 
+    @include('partials/_flash')
+
     <div class="container">
         <div class="row content">
             <div class="col-xs-12">
