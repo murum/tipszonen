@@ -51,6 +51,11 @@ App::error(function(Exception $exception, $code)
 	Log::error($exception);
 });
 
+App::error(function(Illuminate\Database\Eloquent\ModelNotFoundException $exception)
+{
+    return Redirect::home();
+});
+
 /*
 |--------------------------------------------------------------------------
 | Maintenance Mode Handler

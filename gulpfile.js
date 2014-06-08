@@ -28,6 +28,8 @@ var targetCSSDir = 'public/css';
 var coffeeDir = 'app/assets/coffee';
 var targetJSDir = 'public/js';
 
+var componentsDir = 'public/components';
+
 // Tasks
 /* less compile */
 gulp.task('less', function() {
@@ -42,7 +44,7 @@ gulp.task('less', function() {
 gulp.task('coffee', function() {
     return gulp.src(coffeeDir + '/**/*.coffee')
         .pipe(coffee().on('error', gutil.log))
-        .pipe(concat('min.js'))
+        .pipe(concat('main.js'))
         .pipe(uglify())
         .pipe(gulp.dest(targetJSDir))
 });
@@ -74,6 +76,17 @@ gulp.task('phpunit', function() {
         }));
 });
 
+gulp.task('js-libs', function() {
+    var libs = [
+        componentsDir + '/jquery/dist/jquery.js',
+        componentsDir + '/bootstrap/dist/js/bootstrap.js'
+    ]
+    return gulp.src(libs)
+        .pipe(concat('libs.js'))
+        .pipe(uglify())
+        .pipe(gulp.dest(targetJSDir))
+})
+
 /* Watcher */
 gulp.task('watch', function() {
     gulp.watch(lessDir + '/**/*.less', ['less']);
@@ -83,4 +96,4 @@ gulp.task('watch', function() {
 });
 
 /* Default Task */
-gulp.task('default', ['less', 'coffee', 'phpunit', 'watch']);
+gulp.task('default', ['less', 'js-libs' , 'coffee', 'phpunit', 'watch']);

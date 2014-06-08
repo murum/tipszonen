@@ -6,13 +6,16 @@
     {{ HTML::style('/css/main.css') }}
 </head>
 <body>
+    @include('layout.includes.nav')
+
     <div class="container">
-        <div class="row">
+        <div class="row content">
             <div class="col-xs-12">
-                <h1>Tipszonen.se</h1>
+                @yield('content')
             </div>
         </div>
     </div>
+    {{ HTML::script('/js/libs.js') }}
     {{ HTML::script('/js/main.js') }}
 </body>
 </html>
