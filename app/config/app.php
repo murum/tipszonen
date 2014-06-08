@@ -123,6 +123,7 @@ return array(
 		'Illuminate\Workbench\WorkbenchServiceProvider',
         'Artdarek\OAuth\OAuthServiceProvider',
         'Barryvdh\Debugbar\ServiceProvider',
+        'Laracasts\Validation\ValidationServiceProvider',
     ),
 
 	/*
