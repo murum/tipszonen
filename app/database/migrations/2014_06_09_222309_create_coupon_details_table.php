@@ -16,9 +16,10 @@ class CreateCouponDetailsTable extends Migration {
 		{
 			$table->increments('id');
             $table->integer('product_id')->unsigned();
-            $table->integer('round')->unsigned();
-            $table->integer('game_stop')->unsigned();
-            $table->integer('game_week')->unsigned();
+            $table->string('round');
+            $table->datetime('game_start');
+            $table->datetime('game_stop');
+            $table->string('game_week');
 			$table->timestamps();
 		});
 	}

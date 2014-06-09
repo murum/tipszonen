@@ -8,5 +8,6 @@ composer.lock
 Thumbs.db
 .env.local.php
 /public/components
+/public/tmp
 /node_modules
 .idea

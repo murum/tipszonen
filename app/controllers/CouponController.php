@@ -1,9 +1,76 @@
 <?php
 
 class CouponController extends BaseController {
+    public function __construct()
+    {
+        foreach(Product::all() as $product)
+        {
+            Coupon::_create_new($product->product);
+        }
+    }
+
     public function index()
     {
-        $coupon = new Coupon;
+        $products = Product::all();
+        return View::make('coupon.index', compact('products'));
+    }
+
+    public function create($id)
+    {
+        $matches = Product::whereProductId($id)->whereRound();
+        return View::make('coupon.create')->withMatches($matches);
+    }
+
+    public function create_own_file()
+    {
+        return View::make('coupon.create_from_file');
+    }
+
+    public function store_own_file()
+    {
+        if (Input::hasFile('own_file') && Input::file('own_file')->isValid())
+        {
+            if(Input::file('own_file')->getMimeType() === 'text/plain')
+            {
+                $file = Input::file('own_file');
+                $coupon = new Coupon;
+                $coupon_detail = CouponDetail::getCouponDetailFromFile($file);
+                $user = Auth::user();
+
+                $coupon->coupon_detail_id = $coupon_detail->id;
+                $coupon->user_id = $user->id;
+
+                $rows = $coupon->getRowsFromFile($file);
+
+                if(count($rows) > 0)
+                {
+                    $coupon->save();
+
+                    $coupon->createCouponRows($rows);
+                }
+
+                $file_path = Input::file('own_file')->move('/tmp', uniqid('_tmp') . '.' . Input::file('own_file')->getClientOriginalExtension());
+                return View::make('coupon.completed_from_file')
+                    ->with('file', $file_path->getRealPath());
+            } else
+            {
+                Flash::error('Filtypen är ogiltig, vänligen ladda upp en .txt fil.');
+                return Redirect::back();
+            }
+        } else
+        {
+            Flash::error('Ingen fil var vald');
+            return Redirect::back();
+        }
+    }
+
+    public function create_own_file_completed()
+    {
+        return View::make('coupon.completed_from_file');
+    }
+
+    public function deletedOne()
+    {
         if (!$coupon->_create_new(1))
         {
             $dividend = $coupon->_get_dividends(1);
@@ -16,59 +83,17 @@ class CouponController extends BaseController {
                 $data['main_content_data']['coupons'][] = $coupon;
             }
 
-            $data['main_content'] = "coupon/index";
-
-            $this->load->view("templates/defaultBig", $data);
-
-            return View::make('hello');
+            return View::make('coupon.index');
         } else
         {
             return Redirect::route('home');
         }
     }
 
+
     public function test()
     {
         $txt_file    = file_get_contents(URL::asset('tmp/egnarader_example.txt'));
-        $rows        = explode("\n", $txt_file);
-        $rows_to_return = [];
-        array_shift($rows);
 
-        foreach($rows as $row => $data)
-        {
-            //get row data
-            $row_data = explode(',', $data);
-            $row_value = "";
-            for( $i = 0; $i < count($row_data); $i++)
-            {
-                if($i > 0)
-                {
-                    if($i == count($row_data) - 1)
-                    {
-                        $row_value .= $row_data[$i];
-                    } else
-                    {
-                        $row_value .= $row_data[$i] . ',';
-                    }
-                }
-            }
-            if($row_value != "")
-            {
-                $rows_to_return[] = $row_value;
-            }
-        }
-
-        foreach($rows_to_return as $row_to_add)
-        {
-            $coupon_row = new CouponRow;
-            $coupon_row->product_id = 1;
-            $coupon_row->user_id = 1;
-            $coupon_row->row = $row_to_add;
-            $coupon_row->round = '4444';
-            $coupon_row->game_start = new DateTime;
-            $coupon_row->game_end = new DateTime;
-            $coupon_row->game_week = '201424';
-            $coupon_row->save();
-        }
     }
 }
