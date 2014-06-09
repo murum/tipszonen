@@ -57,6 +57,9 @@ class UpdateCouponRows extends Migration {
                 ->references('id')->on('users')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
+
+            $table->dropForeign('coupon_rows_coupon_id_foreign');
+            $table->dropColumn('coupon_id');
 		});
 	}
 

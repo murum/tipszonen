@@ -29,7 +29,7 @@ class AddForeignToCoupons extends Migration {
 	{
 		Schema::table('coupons', function(Blueprint $table)
 		{
-			$table->dropForeign('coupon_coupon_detail_id_foreign');
+			$table->dropForeign('coupons_coupon_detail_id_foreign');
 		});
 	}
 
