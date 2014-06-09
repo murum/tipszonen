@@ -26,7 +26,8 @@
             "Tipszonen\\": "app/Tipszonen"
         },
         "files": [
-            "app/helpers.php"
+            "app/helpers.php",
+            "app/Forms/RegisterForm.php"
         ]
 	},
 	"scripts": {

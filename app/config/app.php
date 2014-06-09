@@ -124,7 +124,7 @@ return array(
         'Artdarek\OAuth\OAuthServiceProvider',
         'Barryvdh\Debugbar\ServiceProvider',
         'Tipszonen\Notifications\FlashServiceProvider',
-        'Tipszonen\Validation\ValidationServiceProvider',
+        'Laracasts\Validation\ValidationServiceProvider',
     ),
 
 	/*
