@@ -1,5 +1,4 @@
-<?php
-namespace Tipszonen\Forms;
+<?php namespace Tipszonen\Forms;
 
 use Laracasts\Validation\FormValidator;
 

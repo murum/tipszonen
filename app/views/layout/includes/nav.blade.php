@@ -11,6 +11,14 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
+
+                {{-- If user is not logged in --}}
+                @if(Auth::guest())
+                @else
+                    <li>{{ link_to_route('forum', 'Forum') }}</li>
+                    <li>{{ link_to_route('member', 'Medlemmar') }}</li>
+                @endif
+
                 <li class="hidden dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
                     <ul class="dropdown-menu">
@@ -29,7 +37,7 @@
                     <li>{{ link_to_route('logout', 'Logga ut') }}</li>
                 </ul>
 
-                <img class="nav navbar-right navbar-image gravatar-image" src="{{ gravatar_url(Auth::user()->email) }}" alt="{{ Auth::user()->email }}" />
+                <img class="nav navbar-right navbar-image img-rounded gravatar-image" src="{{ gravatar_url(Auth::user()->email) }}" alt="{{ Auth::user()->email }}" />
 
                 <p class="navbar-text navbar-right">
                     Inloggad som {{ Auth::user()->username }}

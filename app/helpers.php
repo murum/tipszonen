@@ -1,8 +1,12 @@
 <?php
 
-function gravatar_url($email)
+function gravatar_url($email, $thumb = true)
 {
-    return 'http://www.gravatar.com/avatar/' . md5($email) . '?s=34';
+    if($thumb) {
+        return 'http://www.gravatar.com/avatar/' . md5($email) . '?s=34';
+    }
+
+    return 'http://www.gravatar.com/avatar/' . md5($email) . '?s=263';
 }
 
 function slugify($text)
@@ -43,4 +47,105 @@ function link_to_facebook($route, $title)
             '.$title.'
         </a>
     ';
+}
+
+define("SECOND", 1);
+define("MINUTE", 60 * SECOND);
+define("HOUR", 60 * MINUTE);
+define("DAY", 24 * HOUR);
+define("MONTH", 30 * DAY);
+function relative_time($time)
+{
+    // If the param $time is not a string
+    if(gettype($time) !== 'string') {
+        $time = strtotime($time);
+    }
+
+    $delta = time() - $time;
+
+    if ($delta < 1 * MINUTE)
+    {
+        return $delta == 1 ? "en sekund sen" : $delta . " sekunder sen";
+    }
+    if ($delta < 2 * MINUTE)
+    {
+        return "en minut sen";
+    }
+    if ($delta < 45 * MINUTE)
+    {
+        return floor($delta / MINUTE) . " minuter sen";
+    }
+    if ($delta < 90 * MINUTE)
+    {
+        return "en timme sen";
+    }
+    if ($delta < 24 * HOUR)
+    {
+        return floor($delta / HOUR) . " timmar sen";
+    }
+    if ($delta < 48 * HOUR)
+    {
+        return "igår";
+    }
+    if ($delta < 30 * DAY)
+    {
+        return floor($delta / DAY) . " dagar sen";
+    }
+    if ($delta < 12 * MONTH)
+    {
+        $months = floor($delta / DAY / 30);
+        return $months <= 1 ? "en månad sen" : $months . " månader sen";
+    }
+    else
+    {
+        $years = floor($delta / DAY / 365);
+        return $years <= 1 ? "ett år sen" : $years . " år sen";
+    }
+}
+
+function time_to_string($time)
+{
+    // If the param $time is not a string
+    if(gettype($time) !== 'string') {
+        $time = strtotime($time);
+    }
+
+    if ($time < 1 * MINUTE)
+    {
+        return $time == 1 ? "en sekund" : $time . " sekunder";
+    }
+    if ($time < 2 * MINUTE)
+    {
+        return "en minut";
+    }
+    if ($time < 45 * MINUTE)
+    {
+        return floor($time / MINUTE) . " minuter";
+    }
+    if ($time < 90 * MINUTE)
+    {
+        return "en timme";
+    }
+    if ($time < 24 * HOUR)
+    {
+        return floor($time / HOUR) . " timmar";
+    }
+    if ($time < 48 * HOUR)
+    {
+        return "en dag";
+    }
+    if ($time < 30 * DAY)
+    {
+        return floor($time / DAY) . " dagar";
+    }
+    if ($time < 12 * MONTH)
+    {
+        $months = floor($time / DAY / 30);
+        return $months <= 1 ? "en månad" : $months . " månader";
+    }
+    else
+    {
+        $years = floor($time / DAY / 365);
+        return $years <= 1 ? "ett år" : $years . " år";
+    }
 }
