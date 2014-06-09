@@ -16,8 +16,8 @@
                 @if(Auth::guest())
                 @else
                     <li>{{ link_to_route('forum', 'Forum') }}</li>
-                    <li>{{ link_to_route('member', 'Medlemmar') }}</li>
                 @endif
+                <li>{{ link_to_route('member', 'Medlemmar') }}</li>
 
                 <li class="hidden dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
