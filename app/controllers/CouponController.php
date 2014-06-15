@@ -25,7 +25,15 @@ class CouponController extends BaseController {
         $dividends = $coupon->get_dividends();
         $has_dividends = $dividends ? true : false;
         $results = $coupon->coupon_detail->get_row_result();
-        $win = $coupon->get_win($dividends);
+
+        if($has_dividends)
+        {
+            $win = $coupon->get_win($dividends);
+        } else
+        {
+            $win = ($coupon->cost) * -1;
+        }
+
         $best_rows = $coupon->get_best_rows($row_amount_to_show, $results);
 
         return  View::make('coupon.show', compact('coupon', 'rows', 'best_rows', 'matches', 'dividends', 'has_dividends', 'results', 'win'));
