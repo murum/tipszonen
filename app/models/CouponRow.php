@@ -4,13 +4,21 @@ class CouponRow extends Eloquent {
     protected $table = "coupon_rows";
     protected $fillable = [];
 
-    public function user()
+    public function coupon()
     {
-        return $this->belongsTo('User');
+        return $this->belongsTo('Coupon');
     }
 
-    public function product()
+    public function get_rights($results)
     {
-        return $this->belongsTo('Product');
+        $row = explode(',', $this->row);
+
+        $rights = 0;
+        for($i = 0; $i<count($row); $i++)
+        {
+            if($row[$i] == $results[$i])
+                $rights++;
+        }
+        return $rights;
     }
 }

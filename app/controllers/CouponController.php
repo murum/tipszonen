@@ -15,6 +15,22 @@ class CouponController extends BaseController {
         return View::make('coupon.index', compact('products'));
     }
 
+    public function show($id)
+    {
+        $row_amount_to_show = 4;
+
+        $coupon = Coupon::customFind($id);
+        $rows = $coupon->coupon_rows;
+        $matches = $coupon->coupon_detail->matches;
+        $dividends = $coupon->get_dividends();
+        $has_dividends = $dividends ? true : false;
+        $results = $coupon->coupon_detail->get_row_result();
+        $win = $coupon->get_win($dividends);
+        $best_rows = $coupon->get_best_rows($row_amount_to_show, $results);
+
+        return  View::make('coupon.show', compact('coupon', 'rows', 'best_rows', 'matches', 'dividends', 'has_dividends', 'results', 'win'));
+    }
+
     public function create($id)
     {
         $matches = Product::whereProductId($id)->whereRound();
@@ -39,6 +55,7 @@ class CouponController extends BaseController {
 
                 $coupon->coupon_detail_id = $coupon_detail->id;
                 $coupon->user_id = $user->id;
+                $coupon->name = Input::get('name'); // TODO: Add validator
 
                 $rows = $coupon->getRowsFromFile($file);
 
@@ -50,8 +67,10 @@ class CouponController extends BaseController {
                 }
 
                 $file_path = Input::file('own_file')->move('/tmp', uniqid('_tmp') . '.' . Input::file('own_file')->getClientOriginalExtension());
+                $coupon->uploadFileToSVS();
+
                 return View::make('coupon.completed_from_file')
-                    ->with('file', $file_path->getRealPath());
+                    ->with('coupon', $coupon);
             } else
             {
                 Flash::error('Filtypen är ogiltig, vänligen ladda upp en .txt fil.');

@@ -40,6 +40,12 @@ class CreateMatchesTable extends Migration {
 	 */
 	public function down()
 	{
+        Schema::table('matches', function(Blueprint $table)
+        {
+            $table->dropForeign('matches_product_id_foreign');
+            $table->dropColumn('product_id');
+        });
+
 		Schema::drop('matches');
 	}
 
