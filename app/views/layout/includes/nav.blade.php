@@ -38,11 +38,13 @@
                     <li>{{ link_to_route('logout', 'Logga ut') }}</li>
                 </ul>
 
-                <img class="nav navbar-right navbar-image img-rounded gravatar-image" src="{{ gravatar_url(Auth::user()->email) }}" alt="{{ Auth::user()->email }}" />
+                <a href="{{ route('member.edit', Auth::user()->id) }}">
+                    <img class="nav navbar-right navbar-image img-rounded gravatar-image" src="{{ gravatar_url(Auth::user()->email) }}" alt="{{ Auth::user()->email }}" />
 
-                <p class="navbar-text navbar-right">
-                    Inloggad som {{ Auth::user()->username }}
-                </p>
+                    <p class="navbar-text navbar-right">
+                        Inloggad som {{ Auth::user()->username }}
+                    </p>
+                </a>
             @else
                 <ul class="nav navbar-nav navbar-right">
                     <li>{{ link_to_route('login', 'Logga in') }}</li>

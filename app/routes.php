@@ -26,6 +26,8 @@ Route::get('skapa-kupong/egna-filer/klar', array('as' => 'own_file.completed', '
 // Medlemmar
 Route::get('medlemmar', array('as' => 'member', 'uses' => 'MembersController@index'));
 Route::get('medlemmar/{id}', array('as' => 'member.show', 'uses' => 'MembersController@show'));
+Route::get('medlemmar/{id}/redigera', array('as' => 'member.edit', 'uses' => 'MembersController@edit'));
+Route::post('medlemmar/{id}/redigera', array('as' => 'member.update', 'uses' => 'MembersController@update'));
 
 // Forum routes
 Route::get('forum', array('as' => 'forum', 'before' => 'auth', 'uses' => 'ForumController@index'));

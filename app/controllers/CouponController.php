@@ -75,10 +75,24 @@ class CouponController extends BaseController {
                 }
 
                 $file_path = Input::file('own_file')->move('/tmp', uniqid('_tmp') . '.' . Input::file('own_file')->getClientOriginalExtension());
-                $coupon->uploadFileToSVS();
+
+                $input_svs_card = Input::get('svs_card') === "" ? null : Input::get('svs_card');
+                if( isset($input_svs_card) && strlen($input_svs_card !== 7) )
+                {
+                    return Redirect::back()->withInput();
+                }
+
+                $card_number = isset($user->svs_card) ? $user->svs_card : $input_svs_card;
+                $svs_activated = false;
+                if(isset($card_number))
+                {
+                    $coupon->uploadFileToSVS($card_number);
+                    $svs_activated = true;
+                }
 
                 return View::make('coupon.completed_from_file')
-                    ->with('coupon', $coupon);
+                    ->with('coupon', $coupon)
+                    ->with('svs_button', $svs_activated);
             } else
             {
                 Flash::error('Filtypen är ogiltig, vänligen ladda upp en .txt fil.');
