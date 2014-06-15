@@ -137,8 +137,8 @@ class Coupon extends Eloquent {
 
     public function get_dividends()
     {
-        $product_id = 2; // $this->coupon_detail->product_id;
-        $round = 1366; // $this->coupon_detail->round;
+        $product_id = $this->coupon_detail->product_id;
+        $round = $this->coupon_detail->round;
         $data = [];
         $file = "https://svenskaspel.se/xternal/XMLresultat.asp";
         $xml = new DOMDocument();
