@@ -1,6 +1,16 @@
 <?php
 
+use Artdarek\OAuth\OAuth;
+
 class SessionsController extends BaseController {
+    public $oauth;
+
+    public function __construct( Oauth $oauth )
+    {
+        $this->oauth = $oauth;
+        $this->oauth->setHttpClient('CurlClient');
+    }
+
     public function create()
     {
         return View::make('session.create');
@@ -44,7 +54,7 @@ class SessionsController extends BaseController {
         $code = Input::get( 'code' );
 
         // get fb service
-        $fb = OAuth::consumer( 'Facebook' );
+        $fb = $this->oauth->consumer( 'Facebook' );
 
         // if code is provided get user data and sign in
         if ( !empty( $code ) ) {
