@@ -15,7 +15,6 @@
                 {{-- If user is not logged in --}}
                 @if(Auth::guest())
                 @else
-                    <li>{{ link_to_route('forum', 'Forum') }}</li>
                     <li>{{ link_to_route('coupon', 'Kupong') }}</li>
                 @endif
                 <li>{{ link_to_route('member', 'Medlemmar') }}</li>
