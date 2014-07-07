@@ -19,7 +19,7 @@ class AdminController extends BaseController {
 
     public function post_coupon_score($id)
     {
-        $match = Match::find($id)->firstOrFail();
+        $match = Match::find($id);
         $match->time = Input::get('time');
         $match->home_score = Input::get('home_score');
         $match->away_score = Input::get('away_score');
