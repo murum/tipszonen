@@ -1,6 +1,10 @@
 <?php
 
+use \Tipszonen\Repository\CouponDetailRepository;
+
 class CouponDetail extends Eloquent {
+    use CouponDetailRepository;
+
     protected $table = 'coupon_details';
     protected $fillable = [];
 

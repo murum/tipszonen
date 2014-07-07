@@ -15,6 +15,9 @@
                 {{-- If user is not logged in --}}
                 @if(Auth::guest())
                 @else
+                    @if(Auth::user()->isAdmin())
+                        <li>{{ link_to_route('admin', 'Admin') }}</li>
+                    @endif
                     <li>{{ link_to_route('coupon', 'Kupong') }}</li>
                 @endif
                 <li>{{ link_to_route('member', 'Medlemmar') }}</li>

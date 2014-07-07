@@ -6,7 +6,7 @@
     {{ HTML::style('/css/main.css') }}
 </head>
 <body>
-    @include('layout.includes.nav')
+    @include('layout.includes.master.nav')
 
     @include('partials/_flash')
 

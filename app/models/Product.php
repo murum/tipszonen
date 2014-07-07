@@ -8,6 +8,11 @@ class Product extends Eloquent {
         return $this->hasMany('Match');
     }
 
+    public function coupon_details()
+    {
+        return $this->hasMany('CouponDetail');
+    }
+
     public static function getProductFromFile($file)
     {
         $txt_file = file_get_contents($file);

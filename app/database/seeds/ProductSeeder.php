@@ -9,21 +9,32 @@ class ProductSeeder extends Seeder{
         Product::create(
             array(
                 'product' => 1,
-                'name' => 'Stryktipset'
+                'name' => 'Stryktipset',
+                'slug' => 'stryktips'
             )
         );
 
         Product::create(
             array(
                 'product' => 2,
-                'name' => 'Europatipset'
+                'name' => 'Europatipset',
+                'slug' => 'europatips'
             )
         );
 
         Product::create(
             array(
-                'product' => 4,
-                'name' => 'Måltipset'
+                'product' => 70,
+                'name' => 'Topptipset Stryk',
+                'slug' => 'topptips'
+            )
+        );
+
+        Product::create(
+            array(
+                'product' => 71,
+                'name' => 'Topptipset Europa',
+                'slug' => 'topptips'
             )
         );
     }

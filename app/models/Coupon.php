@@ -1,6 +1,7 @@
 <?php
 
 class Coupon extends Eloquent {
+
     protected $fillable = [];
 
     public function coupon_detail()
@@ -78,21 +79,13 @@ class Coupon extends Eloquent {
         return $rows_to_return;
     }
 
-    public static function _create_new($product_id, $round = null)
+    public static function _create_new($product_id)
     {
         $file = "https://svenskaspel.se/xternal/XMLkupong.asp";
         $xml = new DOMDocument();
-        if(isset($round))
+        if(!$xml->load($file."?produktid=".$product_id))
         {
-            if(!$xml->load($file."?produktid=".$product_id."&omgang=".$round))
-            {
-            }
-        }
-        else
-        {
-            if(!$xml->load($file."?produktid=".$product_id))
-            {
-            }
+            return false;
         }
 
         $data['product_name'] = $xml->getElementsByTagName("produktnamn")->item(0)->nodeValue;

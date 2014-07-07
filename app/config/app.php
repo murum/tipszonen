@@ -194,7 +194,6 @@ return array(
 		'View'            => 'Illuminate\Support\Facades\View',
         'OAuth'           => 'Artdarek\OAuth\Facade\OAuth',
         'Flash'           => 'Tipszonen\Notifications\Flash',
-
 	),
 
 );

@@ -4,10 +4,11 @@ use Illuminate\Auth\UserTrait;
 use Illuminate\Auth\UserInterface;
 use Illuminate\Auth\Reminders\RemindableTrait;
 use Illuminate\Auth\Reminders\RemindableInterface;
+use Tipszonen\Roles\HasRole;
 
 class User extends BaseModel implements UserInterface, RemindableInterface {
 
-	use UserTrait, RemindableTrait;
+	use UserTrait, RemindableTrait, HasRole;
 
 	/**
 	 * The database table used by the model.
@@ -55,9 +56,14 @@ class User extends BaseModel implements UserInterface, RemindableInterface {
         });
     }
 
-    public function role()
+    public function roles()
     {
         return $this->belongsToMany('Role');
+    }
+
+    /** ROLES **/
+    public function isAdmin() {
+        return $this->hasRole(Role::ADMIN);
     }
 
     public function attempts()

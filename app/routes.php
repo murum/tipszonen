@@ -29,5 +29,8 @@ Route::get('medlemmar/{id}', array('as' => 'member.show', 'uses' => 'MembersCont
 Route::get('medlemmar/{id}/redigera', array('as' => 'member.edit', 'uses' => 'MembersController@edit'));
 Route::post('medlemmar/{id}/redigera', array('as' => 'member.update', 'uses' => 'MembersController@update'));
 
-// Forum routes
-Route::get('forum', array('as' => 'forum', 'before' => 'auth', 'uses' => 'ForumController@index'));
+// Admin
+Route::get('admin', array('as' => 'admin', 'before' => 'auth|auth.is_admin', 'uses' => 'AdminController@index'));
+Route::get('admin/liverattning', array('as' => 'admin.liverattning', 'before' => 'auth|auth.is_admin', 'uses' => 'AdminController@get_score'));
+Route::get('admin/uppdatera-resultat/{id}', array('as' => 'admin.liverattning.get_single', 'before' => 'auth|auth.is_admin', 'uses' => 'AdminController@get_coupon_score'));
+Route::post('admin/uppdatera-resultat/match/{id}', array('as' => 'admin.liverattning.update.match', 'before' => 'auth|auth.is_admin', 'uses' => 'AdminController@post_coupon_score'));
