@@ -1,6 +1,7 @@
 <?php
-
+use \Tipszonen\Repository\CouponRepository;
 class Coupon extends Eloquent {
+    use CouponRepository;
 
     protected $fillable = [];
 
@@ -32,6 +33,11 @@ class Coupon extends Eloquent {
         $sorted_rows = tz_array_sort($unsorted_rows, 'rights');
 
         return array_slice($sorted_rows, 0, $count);
+    }
+
+    public function get_best_row_rights()
+    {
+        return $this->get_best_rows(1, $this->coupon_detail->get_row_result())[0]['rights'];
     }
 
     public function createCouponRows($rows)
@@ -181,16 +187,15 @@ class Coupon extends Eloquent {
         return $sum;
     }
 
-    public function generateOwnFileXML()
+    public function generateOwnFileXML($svs_card)
     {
         // TODO: Add exception controls.
         $progName = "Tipszonen";
         $ombud = Config::get('app.affiliate_id'); // TradedoublerID;
-        $cardNumber = '1752943'; // TODO: Change this to a user specific card number.
         $product = $this->coupon_detail()->first()->product->product;
         $product_name = $this->coupon_detail()->first()->product->name;
 
-        $xml = '<egnarader klient="'.$progName.'" spelkort="'.$cardNumber.'" ombud="'.$ombud.'">';
+        $xml = '<egnarader klient="'.$progName.'" spelkort="'.$svs_card.'" ombud="'.$ombud.'">';
         $xml .= '<spel produkt="'.$product.'" produktnamn="'.$product_name.'">';
 
         foreach($this->coupon_rows()->get() as $row)
@@ -204,18 +209,17 @@ class Coupon extends Eloquent {
         return $xml;
     }
 
-    public function uploadFileToSVS()
+    public function uploadFileToSVS($svs_card)
     {
         // TODO: Add exception controls.
         $url = 'https://svenskaspel.se/xternal/xmlegnarader.asp';
-        $data = array('xml' => $this->generateOwnFileXML());
 
         // use key 'http' even if you send the request to https://...
         $options = array(
             'http' => array(
                 'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
                 'method'  => 'POST',
-                'content' => $this->generateOwnFileXML(),
+                'content' => $this->generateOwnFileXML($svs_card),
             ),
         );
         $context  = stream_context_create($options);

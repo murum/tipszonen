@@ -3,10 +3,6 @@
 class CouponController extends BaseController {
     public function __construct()
     {
-        foreach(Product::all() as $product)
-        {
-            Coupon::_create_new($product->product);
-        }
     }
 
     public function index()
@@ -41,12 +37,18 @@ class CouponController extends BaseController {
 
     public function create($id)
     {
+        // TODO: Not implemented yet
         $matches = Product::whereProductId($id)->whereRound();
         return View::make('coupon.create')->withMatches($matches);
     }
 
     public function create_own_file()
     {
+        foreach(Product::all() as $product)
+        {
+            Coupon::_create_new($product->product);
+        }
+
         return View::make('coupon.create_from_file');
     }
 
@@ -77,7 +79,7 @@ class CouponController extends BaseController {
                 $file_path = Input::file('own_file')->move('/tmp', uniqid('_tmp') . '.' . Input::file('own_file')->getClientOriginalExtension());
 
                 $input_svs_card = Input::get('svs_card') === "" ? null : Input::get('svs_card');
-                if( isset($input_svs_card) && strlen($input_svs_card !== 7) )
+                if( isset($input_svs_card) && strlen($input_svs_card) !== 7 )
                 {
                     return Redirect::back()->withInput();
                 }
@@ -86,8 +88,13 @@ class CouponController extends BaseController {
                 $svs_activated = false;
                 if(isset($card_number))
                 {
-                    $coupon->uploadFileToSVS($card_number);
-                    $svs_activated = true;
+                    if($coupon->uploadFileToSVS($card_number))
+                    {
+                        $svs_activated = true;
+                    } else {
+                        Flash::error('Någonting gick fel med skapandet av kupongen, vänligen försök igen.');
+                        return Redirect::back();
+                    }
                 }
 
                 return View::make('coupon.completed_from_file')
@@ -129,12 +136,5 @@ class CouponController extends BaseController {
         {
             return Redirect::route('home');
         }
-    }
-
-
-    public function test()
-    {
-        $txt_file    = file_get_contents(URL::asset('tmp/egnarader_example.txt'));
-
     }
 }
