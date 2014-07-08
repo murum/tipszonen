@@ -82,8 +82,6 @@ class SessionsController extends BaseController {
                     return Redirect::route('register')->withErrors($user->getErrors());
                 } else
                 {
-                    $user->attachRole(Role::MEMBER);
-
                     Flash::success('Du loggades in och ett konto skapades.');
                     Auth::login($user);
                 }

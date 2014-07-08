@@ -54,6 +54,12 @@ class User extends BaseModel implements UserInterface, RemindableInterface {
             $model->register_ip = get_ip();
             return $model;
         });
+
+        static::created(function($model)
+        {
+            $model->attachRole(Role::MEMBER);
+            return $model;
+        });
     }
 
     public function roles()

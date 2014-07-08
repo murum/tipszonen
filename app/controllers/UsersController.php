@@ -52,8 +52,6 @@ class UsersController extends \BaseController {
             $user->fill($input);
             $user->save();
 
-            $user->attachRole(Role::MEMBER);
-
             Auth::login($user);
 
         } catch (FormValidationException $e) {
