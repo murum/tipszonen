@@ -22,6 +22,12 @@ class Match extends Eloquent
         return strftime('%A %H:%M', strtotime($this->start));
     }
 
+    public function coupon_format_start()
+    {
+        $start = new DateTime($this->start);
+        return $start->format('Y-m-d H:i');
+    }
+
     public function get_result()
     {
         if($this->home_score > $this->away_score)

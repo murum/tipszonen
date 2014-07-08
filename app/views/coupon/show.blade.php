@@ -17,7 +17,7 @@
             @foreach($matches as $match)
             <tr class="">
                 <td>{{ $match->matchnumber }}</td>
-                <td>{{ $match->formated_start()}}</td>
+                <td>{{ $match->formated_start() }}</td>
                 <td>{{ $match->home_team }}</td>
                 <td>{{ $match->away_team }}</td>
                 <td>{{ $match->home_score }} - {{ $match->away_score }}</td>

@@ -85,6 +85,11 @@ class Coupon extends Eloquent {
         return $rows_to_return;
     }
 
+    public function getRowsFromCoupon($input)
+    {
+        dd($input);
+    }
+
     public static function _create_new($product_id)
     {
         $file = "https://svenskaspel.se/xternal/XMLkupong.asp";
@@ -136,7 +141,7 @@ class Coupon extends Eloquent {
 
     public function get_dividends()
     {
-        $product_id = $this->coupon_detail->product_id;
+        $product_id = $this->coupon_detail->product->product;
         $round = $this->coupon_detail->round;
         $data = [];
         $file = "https://svenskaspel.se/xternal/XMLresultat.asp";
@@ -196,6 +201,14 @@ class Coupon extends Eloquent {
         $product_name = $this->coupon_detail()->first()->product->name;
 
         $xml = '<egnarader klient="'.$progName.'" spelkort="'.$svs_card.'" ombud="'.$ombud.'">';
+
+        // If there's topptipset stryk, topptipset europa. Switch to topptipset
+        if($product == 70 || $product == 71)
+        {
+            $product = 72;
+            $product_name = 'Topptipset';
+        }
+
         $xml .= '<spel produkt="'.$product.'" produktnamn="'.$product_name.'">';
 
         foreach($this->coupon_rows()->get() as $row)
@@ -205,6 +218,7 @@ class Coupon extends Eloquent {
 
         $xml .= '</spel>';
         $xml .= '</egnarader>';
+        dd($xml);
 
         return $xml;
     }
