@@ -4,19 +4,14 @@
     <h1>Kuponger hos Tipszonen</h1>
     <div class="row">
         <div class="col-xs-12 col-sm-8">
-            <div class="row">
-                <div class="col-xs-12">
-                    <h3>Skapa ny kupong</h3>
-                    <a class="btn btn-lg btn-success" href="{{ route('own_files') }}">
-                        Med Egna Filer
-                    </a>
-                </div>
-            </div>
+            <h3>Snabbuppladdning med egna filer</h3>
+            @include('coupon/partials/_create_coupon_file_form')
 
             <div class="spacer"></div>
 
             <div class="row">
                 <div class="col-xs-12">
+                    <h3>... eller skapa matematiskt system</h3>
                     @foreach($products as $product)
                         <a class="btn btn-lg btn-success btn-{{$product->slug}}" href="{{ route('coupon.new', [$product->id] ) }}">
                             {{ $product->name }}

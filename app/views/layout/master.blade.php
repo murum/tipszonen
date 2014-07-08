@@ -9,6 +9,7 @@
     @include('layout.includes.master.nav')
 
     @include('partials/_flash')
+    @include('partials/_errors')
 
     <div class="container">
         <div class="row content">

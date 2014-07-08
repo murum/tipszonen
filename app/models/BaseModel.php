@@ -8,16 +8,17 @@ class BaseModel extends Eloquent {
     {
         parent::boot();
 
-        /*static::saving(function($model)
+        /*
+        static::saving(function($model)
         {
             return $model->validate();
-        });*/
+        });
+        */
     }
 
     public function validate()
     {
         $validation = Validator::make($this->getAttributes(), static::$rules);
-
 
         if($validation->fails())
         {

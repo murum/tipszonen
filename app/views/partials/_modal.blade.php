@@ -9,7 +9,7 @@
                 <p>{{ $body }}</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Stäng</button>
             </div>
         </div>
     </div>

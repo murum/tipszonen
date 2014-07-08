@@ -13,11 +13,9 @@ class CouponController extends BaseController {
 
     public function show($id)
     {
-        $row_amount_to_show = 4;
+        $row_amount_to_show = 8;
 
         $coupon = Coupon::customFind($id);
-        $rows = $coupon->coupon_rows;
-        $matches = $coupon->coupon_detail->matches;
         $dividends = $coupon->get_dividends();
         $has_dividends = $dividends ? true : false;
         $results = $coupon->coupon_detail->get_row_result();
@@ -32,12 +30,33 @@ class CouponController extends BaseController {
 
         $best_rows = $coupon->get_best_rows($row_amount_to_show, $results);
 
-        return  View::make('coupon.show', compact('coupon', 'rows', 'best_rows', 'matches', 'dividends', 'has_dividends', 'results', 'win'));
+        return  View::make('coupon.show', compact('coupon', 'best_rows', 'dividends', 'has_dividends', 'results', 'win'));
+    }
+
+    public function show_update($id)
+    {
+        $row_amount_to_show = 8;
+
+        $coupon = Coupon::customFind($id);
+        $dividends = $coupon->get_dividends();
+        $has_dividends = $dividends ? true : false;
+        $results = $coupon->coupon_detail->get_row_result();
+
+        if($has_dividends)
+        {
+            $win = $coupon->get_win($dividends);
+        } else
+        {
+            $win = ($coupon->cost) * -1;
+        }
+
+        $best_rows = $coupon->get_best_rows($row_amount_to_show, $results);
+
+        return  View::make('coupon.show_update', compact('coupon', 'best_rows', 'dividends', 'has_dividends', 'results', 'win'));
     }
 
     public function create($id)
     {
-        // TODO: Not implemented yet
         $coupon = CouponDetail::with('matches')->whereProductId($id)->get()->last();
 
         return View::make('coupon.create', compact('coupon'));
@@ -51,7 +70,7 @@ class CouponController extends BaseController {
 
         $coupon->coupon_detail_id = $coupon_detail->id;
         $coupon->user_id = $user->id;
-        $coupon->name = Input::get('name'); // TODO: Add validator
+        $coupon->name = Input::get('name');
 
         foreach($coupon_detail->matches as $match)
         {
@@ -74,9 +93,13 @@ class CouponController extends BaseController {
 
         if(count($rows) > 0)
         {
-            $coupon->save();
-
-            $coupon->createCouponRows($rows);
+            if( ! $coupon->save() )
+            {
+                return Redirect::back()->withErrors($coupon->getErrors())->withInput();
+            } else
+            {
+                $coupon->createCouponRows($rows);
+            }
         }
 
         $input_svs_card = Input::get('svs_card') === "" ? null : Input::get('svs_card');
@@ -93,6 +116,7 @@ class CouponController extends BaseController {
             }
         }
 
+        Flash::success('Din kupong skapades.');
         return View::make('coupon.completed_from_file')
             ->with('coupon', $coupon)
             ->with('svs_button', $svs_activated);
@@ -127,9 +151,13 @@ class CouponController extends BaseController {
 
                 if(count($rows) > 0)
                 {
-                    $coupon->save();
-
-                    $coupon->createCouponRows($rows);
+                    if( ! $coupon->save() )
+                    {
+                        return Redirect::back()->withErrors($coupon->getErrors())->withInput();
+                    } else
+                    {
+                        $coupon->createCouponRows($rows);
+                    }
                 }
 
                 $file_path = Input::file('own_file')->move('/tmp', uniqid('_tmp') . '.' . Input::file('own_file')->getClientOriginalExtension());
@@ -149,22 +177,23 @@ class CouponController extends BaseController {
                         $svs_activated = true;
                     } else {
                         Flash::error('Någonting gick fel med skapandet av kupongen, vänligen försök igen.');
-                        return Redirect::back();
+                        return Redirect::back()->withInput();
                     }
                 }
 
+                Flash::success('Din kupong skapades.');
                 return View::make('coupon.completed_from_file')
                     ->with('coupon', $coupon)
                     ->with('svs_button', $svs_activated);
             } else
             {
                 Flash::error('Filtypen är ogiltig, vänligen ladda upp en .txt fil.');
-                return Redirect::back();
+                return Redirect::back()->withInput();
             }
         } else
         {
             Flash::error('Ingen fil var vald');
-            return Redirect::back();
+            return Redirect::back()->withInput();
         }
     }
 

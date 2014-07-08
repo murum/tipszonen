@@ -184,3 +184,7 @@ function time_to_string($time)
         return $years <= 1 ? "ett år" : $years . " år";
     }
 }
+
+function hyphenate($char, $str, $size) {
+    return implode($char, str_split($str, $size));
+}

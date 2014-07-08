@@ -1,9 +1,27 @@
 <?php
 use \Tipszonen\Repository\CouponRepository;
-class Coupon extends Eloquent {
+class Coupon extends BaseModel {
     use CouponRepository;
 
     protected $fillable = [];
+    protected static $rules = [
+        'name' => 'required|alpha_num_spaces|min:3',
+    ];
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function($model)
+        {
+            if($model->validate())
+            {
+                return $model;
+            }
+
+            return false;
+        });
+    }
 
     public function coupon_detail()
     {
@@ -201,14 +219,6 @@ class Coupon extends Eloquent {
         $product_name = $this->coupon_detail()->first()->product->name;
 
         $xml = '<egnarader klient="'.$progName.'" spelkort="'.$svs_card.'" ombud="'.$ombud.'">';
-
-        // If there's topptipset stryk, topptipset europa. Switch to topptipset
-        if($product == 70 || $product == 71)
-        {
-            $product = 72;
-            $product_name = 'Topptipset';
-        }
-
         $xml .= '<spel produkt="'.$product.'" produktnamn="'.$product_name.'">';
 
         foreach($this->coupon_rows()->get() as $row)
@@ -218,7 +228,6 @@ class Coupon extends Eloquent {
 
         $xml .= '</spel>';
         $xml .= '</egnarader>';
-        dd($xml);
 
         return $xml;
     }

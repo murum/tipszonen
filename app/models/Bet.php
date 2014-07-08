@@ -72,9 +72,9 @@ class Bet {
                 $current_row .= $bet;
                 if(strlen($current_row) == $row_length)
                 {
+                    $current_row = hyphenate(',', $current_row, 1);
                     self::$rows[] = $current_row;
                 }
-                $current_row = null;
             }
             return self::$rows;
         }
