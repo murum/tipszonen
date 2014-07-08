@@ -31,6 +31,10 @@ Route::post('medlemmar/{id}/redigera', array('as' => 'member.update', 'uses' => 
 
 // Admin
 Route::get('admin', array('as' => 'admin', 'before' => 'auth|auth.is_admin', 'uses' => 'AdminController@index'));
+Route::get('admin/medlemmar', array('as' => 'admin.users', 'before' => 'auth|auth.is_admin', 'uses' => 'AdminController@get_users'));
+Route::get('admin/medlemmar/{id}', array('as' => 'admin.users.get_single', 'before' => 'auth|auth.is_admin', 'uses' => 'AdminController@get_user'));
+Route::get('admin/medlemmar/{id}/ta-bort', array('as' => 'admin.users.get_remove', 'before' => 'auth|auth.is_admin', 'uses' => 'AdminController@get_remove_user'));
+Route::post('admin/medlemmar/{id}', array('as' => 'admin.users.post_single', 'before' => 'auth|auth.is_admin', 'uses' => 'AdminController@post_user'));
 Route::get('admin/liverattning', array('as' => 'admin.liverattning', 'before' => 'auth|auth.is_admin', 'uses' => 'AdminController@get_score'));
 Route::get('admin/uppdatera-resultat/{id}', array('as' => 'admin.liverattning.get_single', 'before' => 'auth|auth.is_admin', 'uses' => 'AdminController@get_coupon_score'));
 Route::post('admin/uppdatera-resultat/match/{id}', array('as' => 'admin.liverattning.update.match', 'before' => 'auth|auth.is_admin', 'uses' => 'AdminController@post_coupon_score'));

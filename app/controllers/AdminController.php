@@ -3,7 +3,66 @@
 class AdminController extends BaseController {
     public function index()
     {
-        return View::make('admin.index');
+        $ongoing_coupons = CouponDetail::ongoingCoupons();
+
+        return View::make(
+            'admin.index',
+            compact(
+                'ongoing_coupons'
+            )
+        );
+    }
+
+    public function get_users()
+    {
+        $users = User::with('roles')->get();
+
+        return View::make(
+            'admin.users',
+            compact(
+                'users'
+            )
+        );
+    }
+
+    public function get_user($id)
+    {
+        $user = User::with('roles')->find($id);
+
+        return View::make(
+            'admin.user',
+            compact(
+                'user'
+            )
+        );
+    }
+
+    public function get_remove_user($id)
+    {
+        $user = User::find($id);
+        $user->detachRoles(Role::all());
+
+        if(User::destroy($id))
+        {
+            Flash::success('Användaren togs bort');
+        } else
+        {
+            Flash::error('Någonting gick fel, Användaren togs inte bort');
+        }
+
+        return Redirect::back();
+    }
+
+    public function post_user($id)
+    {
+        $user = User::with('roles')->find($id);
+        $input = Input::only('roles');
+
+        $user->detachRoles(Role::all());
+        $user->attachRoles($input['roles']);
+
+        Flash::success('Användarens roller uppdaterades');
+        return Redirect::back();
     }
 
     public function get_score()

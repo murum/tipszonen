@@ -1,1 +1,1 @@
-(function(){var n;n=function(){function n(){}return n}()}).call(this),function(){var n;n=function(){function n(){}return n}()}.call(this);
+(function(){var n;n=function(){function n(){}return $("a.user-remove").on("click",function(){return confirm("Är du säker på att du vill ta bort den här användaren?")?void 0:!1}),n}()}).call(this),function(){var n;n=function(){function n(){}return n}()}.call(this);
