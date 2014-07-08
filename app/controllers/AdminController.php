@@ -8,7 +8,18 @@ class AdminController extends BaseController {
 
     public function get_score()
     {
-        return View::make('admin.coupons');
+        $ongoing_coupons = CouponDetail::ongoingCoupons();
+        $coming_coupons = CouponDetail::comingCoupons();
+        $ended_coupons = CouponDetail::endedCoupons();
+
+        return View::make(
+            'admin.coupons',
+            compact(
+                'ongoing_coupons',
+                'coming_coupons',
+                'ended_coupons'
+            )
+        );
     }
 
     public function get_coupon_score($id)

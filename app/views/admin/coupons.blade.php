@@ -4,7 +4,7 @@
 <h1>Rätta kuponger</h1>
 <h2>Pågående omgångar</h2>
     <ul class="list-group">
-        @foreach(CouponDetail::ongoingCoupons() as $coupon)
+        @foreach($ongoing_coupons as $coupon)
             <li class="list-group-item">
                 {{
                     link_to_route(
@@ -19,7 +19,7 @@
     </ul>
 <h2>Kommande omgångar</h2>
     <ul class="list-group">
-        @foreach(CouponDetail::comingCoupons() as $coupon)
+        @foreach($coming_coupons as $coupon)
             <li class="list-group-item">
                 {{
                     link_to_route(
@@ -34,7 +34,7 @@
     </ul>
 <h2>Avslutade omgångar</h2>
     <ul class="list-group">
-        @foreach(CouponDetail::endedCoupons() as $coupon)
+        @foreach($ended_coupons as $coupon)
             <li class="list-group-item">
                 {{
                     link_to_route(
