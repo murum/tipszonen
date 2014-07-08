@@ -52,27 +52,15 @@ class UsersController extends \BaseController {
             $user->fill($input);
             $user->save();
 
+            $user->attachRole(Role::MEMBER);
+
+            Auth::login($user);
+
         } catch (FormValidationException $e) {
             return Redirect::back()->withInput()->withErrors($e->getErrors());
         }
 
         return Redirect::home();
-
-        /*$user = new User(Input::only([
-            'username',
-            'email',
-            'email_confirmation',
-            'password',
-            'password_confirmation'
-        ]));
-
-        dd($user);
-
-        if( ! $user->save() )
-        {
-            return Redirect::back()->withInput()->withErrors($user->getErrors());
-        }
-        return Redirect::home();*/
     }
 
     /**

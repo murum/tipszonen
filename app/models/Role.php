@@ -6,6 +6,7 @@ class Role extends Eloquent {
 	public $timestamps = false;
 
     const ADMIN = 'Admin';
+    const MEMBER = 5;
 
 	public function permissions()
 	{
