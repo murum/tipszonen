@@ -11,7 +11,9 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
+                <li>{{ link_to_route('admin', 'Admin') }}</li>
                 <li>{{ link_to_route('admin.liverattning', 'Rättning') }}</li>
+                <li>{{ link_to_route('admin.users', 'Medlemmar') }}</li>
 
                 <li class="hidden dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>

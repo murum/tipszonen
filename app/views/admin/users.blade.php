@@ -1,10 +1,6 @@
 @extends('layout.admin')
 
 @section('content')
-    <h1>Adminpanel</h1>
-    {{ link_to_route('admin.liverattning', 'Kuponger', null, ['class' => 'btn btn-lg btn-success']) }}
-    {{ link_to_route('admin.users', 'Medlemmar', null, ['class' => 'btn btn-lg btn-success']) }}
-
     @if(count($users) > 0)
         <h2>Användare</h2>
         <ul class="list-group">
