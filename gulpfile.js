@@ -47,6 +47,7 @@ gulp.task('coffee', function() {
         .pipe(concat('main.js'))
         .pipe(uglify())
         .pipe(gulp.dest(targetJSDir))
+        .pipe(notify('JS compiled, prefixed, and minified.'));
 });
 
 gulp.task('images', function () {

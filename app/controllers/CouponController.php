@@ -8,6 +8,11 @@ class CouponController extends BaseController {
     public function index()
     {
         $products = Product::all();
+        foreach($products as $product)
+        {
+            Coupon::_create_new($product->product);
+        }
+
         return View::make('coupon.index', compact('products'));
     }
 

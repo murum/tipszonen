@@ -18,8 +18,8 @@ class Match extends Eloquent
 
     public function formated_start()
     {
-        setlocale(LC_ALL, 'sv_SE');
-        return strftime('%A %H:%M', strtotime($this->start));
+        $start = new DateTime($this->start);
+        return Lang::get(sprintf('days.%s', date('l'))) . ', ' . $start->format('H:i');
     }
 
     public function coupon_format_start()
