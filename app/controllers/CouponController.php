@@ -108,6 +108,11 @@ class CouponController extends BaseController {
             ];
         }
         $rows = Bet::get_rows($match_bets, sizeof($match_bets));
+        if(count($rows) > 12000)
+        {
+            Flash::error('Din kupong får vara max 12000 rader');
+            return Redirect::back()->withInput();
+        }
 
         if(count($rows) > 0)
         {

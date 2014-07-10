@@ -28,7 +28,7 @@
         </div>
     </div>
 </div>
-<ul class="list-group">
+<ul class="list-group" id="coupon-matches">
     @foreach($coupon->matches as $match)
     <li class="list-group-item">
         <div class="row">
@@ -59,5 +59,12 @@
     @endforeach
 </ul>
 
-{{ Form::submit('Skapa kupong', ['class' => 'btn btn-success']) }}
+<div id="rows-container" class="alert alert-danger">
+    Din kupong är just nu på <span class="row-numbers">0</span> rader
+</div>
+
+<div id="coupon-submit-container">
+    {{ Form::submit('Skapa kupong', ['class' => 'btn btn-success']) }}
+    <span class="help-block">Ifall din kupong innehåller över många rader kan det ta några skunder att skapa kupongen.</span>
+</div>
 {{ Form::close() }}
