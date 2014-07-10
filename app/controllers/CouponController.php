@@ -11,27 +11,29 @@ class CouponController extends BaseController {
     {
         $products = Product::all();
 
-        if (Cache::has('recent_coupons'))
-        {
-            $recent_coupons = Cache::get('recent_coupons');
-        } else {
-            $recent_coupons = Coupon::recent_coupons();
-            Cache::put('recent_coupons', $recent_coupons, 60);
-        }
+        $recent_coupons = Coupon::recent_coupons();
+        $user_coupons = Coupon::user_coupons();
 
         foreach($products as $product)
         {
             Coupon::_create_new($product->product);
         }
 
-        return View::make('coupon.index', compact('products', 'recent_coupons'));
+        return View::make('coupon.index', compact('products', 'recent_coupons', 'user_coupons'));
     }
 
     public function show($id)
     {
         $row_amount_to_show = 8;
 
-        $coupon = Coupon::customFind($id);
+        $coupon = Coupon::find($id);
+        if( ! $coupon->is_file() )
+        {
+            $coupon = Coupon::customFind($id);
+        } else
+        {
+            $coupon = Coupon::customFindFile($id);
+        }
         $dividends = $coupon->get_dividends();
         $has_dividends = $dividends ? true : false;
         $results = $coupon->coupon_detail->get_row_result();
@@ -161,22 +163,16 @@ class CouponController extends BaseController {
 
                 $coupon->coupon_detail_id = $coupon_detail->id;
                 $coupon->user_id = $user->id;
-                $coupon->name = Input::get('name'); // TODO: Add validator
+                $coupon->name = Input::get('name');
 
-                $rows = $coupon->getRowsFromFile($file);
+                // Set tile file url and move the file.
+                $file_path = Input::file('own_file')->move('coupons', uniqid('_tmp') . '.' . Input::file('own_file')->getClientOriginalExtension());
+                $coupon->file_url = '/'.$file_path;
 
-                if(count($rows) > 0)
+                if( ! $coupon->save() )
                 {
-                    if( ! $coupon->save() )
-                    {
-                        return Redirect::back()->withErrors($coupon->getErrors())->withInput();
-                    } else
-                    {
-                        $coupon->createCouponRows($rows);
-                    }
+                    return Redirect::back()->withErrors($coupon->getErrors())->withInput();
                 }
-
-                $file_path = Input::file('own_file')->move('/tmp', uniqid('_tmp') . '.' . Input::file('own_file')->getClientOriginalExtension());
 
                 $input_svs_card = Input::get('svs_card') === "" ? null : Input::get('svs_card');
 

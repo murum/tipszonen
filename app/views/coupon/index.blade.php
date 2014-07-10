@@ -21,6 +21,15 @@
             </div>
         </div>
         <div class="col-xs-12 col-sm-4">
+            <h3>Mina senaste kuponger</h3>
+            <div class="list-group">
+                @foreach($user_coupons as $coupon)
+                <a href="{{ route('coupon.show', ['id' => $coupon->id]) }}" class="list-group-item">
+                    {{ $coupon->name }}
+                </a>
+                @endforeach
+            </div>
+
             <h3>Senaste kupongerna</h3>
             <div class="list-group">
                 @foreach($recent_coupons as $coupon)

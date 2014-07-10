@@ -38,15 +38,46 @@ class Coupon extends BaseModel {
         return static::with('coupon_detail', 'coupon_rows')->find($id);
     }
 
+    public static function customFindFile($id)
+    {
+        return static::with('coupon_detail')->find($id);
+    }
+
+    public function get_rights($results, $row)
+    {
+        $row = explode(',', $row);
+
+        $rights = 0;
+        for($i = 0; $i<count($row); $i++)
+        {
+            if($row[$i] == $results[$i])
+                $rights++;
+        }
+        return $rights;
+    }
+
     public function get_best_rows($count, $results)
     {
         $unsorted_rows = [];
-        foreach($this->coupon_rows as $row)
+
+        if( ! $this->is_file() )
         {
-            $unsorted_rows[] = [
-                'row' => $row->row,
-                'rights' => $row->get_rights($results)
-            ];
+            foreach($this->coupon_rows as $row)
+            {
+                $unsorted_rows[] = [
+                    'row' => $row->row,
+                    'rights' => $row->get_rights($results)
+                ];
+            }
+        } else
+        {
+            foreach($this->getRowsFromFile($this->file_url) as $row)
+            {
+                $unsorted_rows[] = [
+                    'row' => $row['row'],
+                    'rights' => self::get_rights($results, $row['row'])
+                ];
+            }
         }
         $sorted_rows = tz_array_sort($unsorted_rows, 'rights');
 
@@ -74,7 +105,9 @@ class Coupon extends BaseModel {
 
     public function getRowsFromFile($file)
     {
-        $txt_file = file_get_contents($file);
+        $file_path = public_path();
+        $file_path .= $file;
+        $txt_file = file_get_contents($file_path);
         $rows = explode("\n", $txt_file);
         $rows_to_return = [];
         array_shift($rows);
@@ -99,7 +132,10 @@ class Coupon extends BaseModel {
             }
             if($row_value != "")
             {
-                $rows_to_return[] = $row_value;
+                $rows_to_return[] = [
+                    'system_type' => 'E',
+                    'row' => $row_value
+                ];
             }
         }
 
@@ -224,15 +260,35 @@ class Coupon extends BaseModel {
         $xml = '<egnarader klient="'.$progName.'" spelkort="'.$svs_card.'" ombud="'.$ombud.'">';
         $xml .= '<spel produkt="'.$product.'" produktnamn="'.$product_name.'">';
 
-        foreach($this->coupon_rows()->get() as $row)
+        if( ! $this->is_file() )
         {
-            $xml .= "<rad system='".$row->system_type."'>".$row->row."</rad>";
+            $xml .= $this->generateXMLRows($this->coupon_rows()->get());
+        } else
+        {
+
+            $xml .= $this->generateXMLRows($this->getRowsFromFile($this->file_url));
         }
+
 
         $xml .= '</spel>';
         $xml .= '</egnarader>';
 
         return $xml;
+    }
+    public function generateXMLRows($rows)
+    {
+        $string = '';
+        foreach($rows as $row)
+        {
+            if( ! $this->is_file() )
+            {
+                $string .= "<rad system='".$row->system_type."'>".$row->row."</rad>";
+            } else
+            {
+                $string .= "<rad system='".$row['system_type']."'>".$row['row']."</rad>";
+            }
+        }
+        return $string;
     }
 
     public function uploadFileToSVS($svs_card)

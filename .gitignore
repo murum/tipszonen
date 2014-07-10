@@ -9,5 +9,6 @@ Thumbs.db
 .env.local.php
 /public/components
 /public/tmp
+/public/coupons
 /node_modules
 .idea

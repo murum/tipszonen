@@ -33,6 +33,20 @@ trait CouponDetailRepository
     }
 
     /**
+     * @param $file
+     *
+     * @return mixed
+     */
+    public static function getCouponDetailFromFile($file)
+    {
+        $txt_file = file_get_contents($file);
+        $rows = explode("\n", $txt_file);
+        $product_name = trim($rows[0]);
+
+        return parent::whereProductId(\Product::whereName($product_name)->firstOrFail()->id)->firstOrFail();
+    }
+
+    /**
      * @param null $status
      *
      * @return array
