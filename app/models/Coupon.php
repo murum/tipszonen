@@ -60,13 +60,16 @@ class Coupon extends BaseModel {
 
     public function createCouponRows($rows)
     {
+        $rows_to_add = [];
         foreach($rows as $row_to_add)
         {
-            $coupon_row = new CouponRow;
-            $coupon_row->coupon_id = $this->id;
-            $coupon_row->row = $row_to_add;
-            $coupon_row->save();
+            $rows_to_add[] = [
+                'coupon_id' => $this->id,
+                'row' => trim($row_to_add)
+            ];
         }
+
+        DB::table('coupon_rows')->insert($rows_to_add);
     }
 
     public function getRowsFromFile($file)

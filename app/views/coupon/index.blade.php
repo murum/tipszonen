@@ -23,10 +23,9 @@
         <div class="col-xs-12 col-sm-4">
             <h3>Senaste kupongerna</h3>
             <div class="list-group">
-                @foreach(Coupon::recent_coupons() as $coupon)
+                @foreach($recent_coupons as $coupon)
                     <a href="{{ route('coupon.show', ['id' => $coupon->id]) }}" class="list-group-item">
                         {{ $coupon->name }}
-                        <span class="badge">{{ $coupon->coupon_rows->count() }}</span>
                     </a>
                 @endforeach
             </div>

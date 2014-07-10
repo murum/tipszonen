@@ -84,14 +84,6 @@ class MembersController extends \BaseController {
         } else {
             $svs_card = Input::get('svs_card') === "" ? null : Input::get('svs_card');
 
-            // If the card number is anything else than 7 numbers
-            if(isset($svs_card) && strlen($svs_card) !== 7)
-            {
-                Flash::error('Ditt spelkortsnummer måste vara 7 siffror.');
-                return Redirect::back()
-                    ->withInput();
-            }
-
             $member->svs_card = $svs_card;
             $member->save();
             Flash::success('Ditt spelkortsnummer uppdaterades.');

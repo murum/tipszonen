@@ -3,17 +3,28 @@
 class CouponController extends BaseController {
     public function __construct()
     {
+        ignore_user_abort(true);
+        set_time_limit(240);
     }
 
     public function index()
     {
         $products = Product::all();
+
+        if (Cache::has('recent_coupons'))
+        {
+            $recent_coupons = Cache::get('recent_coupons');
+        } else {
+            $recent_coupons = Coupon::recent_coupons();
+            Cache::put('recent_coupons', $recent_coupons, 60);
+        }
+
         foreach($products as $product)
         {
             Coupon::_create_new($product->product);
         }
 
-        return View::make('coupon.index', compact('products'));
+        return View::make('coupon.index', compact('products', 'recent_coupons'));
     }
 
     public function show($id)
@@ -168,10 +179,6 @@ class CouponController extends BaseController {
                 $file_path = Input::file('own_file')->move('/tmp', uniqid('_tmp') . '.' . Input::file('own_file')->getClientOriginalExtension());
 
                 $input_svs_card = Input::get('svs_card') === "" ? null : Input::get('svs_card');
-                if( isset($input_svs_card) && strlen($input_svs_card) !== 7 )
-                {
-                    return Redirect::back()->withInput();
-                }
 
                 $card_number = isset($user->svs_card) ? $user->svs_card : $input_svs_card;
                 $svs_activated = false;
