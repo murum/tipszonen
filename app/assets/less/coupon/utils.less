@@ -8,18 +8,37 @@
   }
 }
 
+.match {
+  td:last-child:after {
+    content: '';
+    display: block;
+    float: right;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+  }
+}
+
 .match-not_started {
-  color: @brand-primary;
+  td:last-child:after {
+    background: @brand-info;
+  }
 }
 
 .match-pause {
-  color: @brand-warning;
+  td:last-child:after {
+    background: @brand-warning;
+  }
 }
 
 .match-ended {
-  color: @brand-danger;
+  td:last-child:after {
+    background: @brand-danger;
+  }
 }
 
 .match-on_going {
-  color: @brand-success;
+  td:last-child:after {
+    background: @brand-success;
+  }
 }
