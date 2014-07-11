@@ -1,4 +1,4 @@
-<table class="table table-responsive">
+<table class="table table-responsive table-coupon">
     <thead>
     <tr>
         <th>#</th>
@@ -11,7 +11,7 @@
     </thead>
     <tbody>
     @foreach($coupon->coupon_detail->matches as $match)
-    <tr class="">
+    <tr class="match match-{{ $match->get_match_status() }}">
         <td>{{ $match->matchnumber }}</td>
         <td>{{ $match->formated_start() }}</td>
         <td>{{ $match->home_team }}</td>
@@ -21,6 +21,19 @@
     </tr>
     @endforeach
     </tbody>
+    <tfoot>
+    <tr>
+        <td colspan="6">
+            <div class="help-block">
+                Förklaring för färger
+                <span class="match-not_started">Ej startat</span>
+                <span class="match-on_going">Pågår</span>
+                <span class="match-pause">Paus</span>
+                <span class="match-ended">Avslutad</span>
+            </div>
+        </td>
+    </tr>
+    </tfoot>
 </table>
 <div class="row">
     <div class="col-xs-12 col-sm-6">
