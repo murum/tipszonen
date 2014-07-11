@@ -18,7 +18,9 @@
     border-radius: 50%;
   }
 }
-
+.match-help-not_started {
+  color: @brand-info;
+}
 .match-not_started {
   td:last-child:after {
     background: @brand-info;
@@ -30,15 +32,25 @@
     background: @brand-warning;
   }
 }
+.match-help-pause {
+  color: @brand-warning;
+}
+
 
 .match-ended {
   td:last-child:after {
     background: @brand-danger;
   }
 }
+.match-help-ended {
+  color: @brand-danger;
+}
 
 .match-on_going {
   td:last-child:after {
     background: @brand-success;
   }
+}
+.match-help-on_going {
+  color: @brand-success;
 }

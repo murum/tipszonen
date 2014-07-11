@@ -26,10 +26,10 @@
         <td colspan="6">
             <div class="help-block">
                 Förklaring för färger
-                <span class="match-not_started">Ej startat</span>
-                <span class="match-on_going">Pågår</span>
-                <span class="match-pause">Paus</span>
-                <span class="match-ended">Avslutad</span>
+                <span class="match-help-not_started">Ej startat</span>
+                <span class="match-help-on_going">Pågår</span>
+                <span class="match-help-pause">Paus</span>
+                <span class="match-help-ended">Avslutad</span>
             </div>
         </td>
     </tr>
