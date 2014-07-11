@@ -230,7 +230,13 @@ class Coupon extends BaseModel {
     public function get_win($dividends)
     {
         $results = $this->coupon_detail->get_row_result();
-        $rows = $this->get_best_rows($this->coupon_rows->count(), $results);
+        if( $this->is_file() )
+        {
+            $rows = $this->get_best_rows($this->getRowsFromFile($this->file_url), $results);
+        } else
+        {
+            $rows = $this->get_best_rows($this->coupon_rows->count(), $results);
+        }
         $rights = [];
 
         foreach( $dividends as $dividend )
