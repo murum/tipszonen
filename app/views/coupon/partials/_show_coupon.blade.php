@@ -69,7 +69,7 @@
             <tbody>
             @foreach($dividends as $dividend)
             <tr>
-                <td>{{ $dividend['amount'] }})</td>
+                <td>{{ $dividend['amount'] }}</td>
                 <td>{{ $dividend['rights'] }}</td>
                 <td>{{ $dividend['price'] }}</td>
             </tr>

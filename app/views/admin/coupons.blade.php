@@ -9,7 +9,7 @@
                 {{
                     link_to_route(
                         'admin.liverattning.get_single',
-                        $coupon->game_week.' - '.$coupon->product->name,
+                        $coupon->game_week.' - '.$coupon->product->name.' - '.$coupon->game_stop_formatted(),
                         ['id' => $coupon->id],
                         ['class' => 'btn btn-disabled btn-lg btn-success btn-'.$coupon->product->slug]
                     )
@@ -24,7 +24,7 @@
                 {{
                     link_to_route(
                         'admin.liverattning.get_single',
-                        $coupon->game_week.' - '.$coupon->product->name,
+                        $coupon->game_week.' - '.$coupon->product->name.' - '.$coupon->game_stop_formatted(),
                         ['id' => $coupon->id],
                         ['class' => 'btn btn-lg btn-success btn-'.$coupon->product->slug]
                     )

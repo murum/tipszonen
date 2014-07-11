@@ -102,4 +102,10 @@ trait CouponDetailRepository
         }
         return $coupons;
     }
+
+    public function game_stop_formatted()
+    {
+        setlocale(LC_ALL, 'sv_SE.utf8');
+        return ucfirst(strftime('%A %H:%M', strtotime($this->game_stop)));
+    }
 }
