@@ -41,11 +41,10 @@ gulp.task('less', function() {
 });
 
 /* coffee compile */
-gulp.task('coffee', function() {
-    return gulp.src(coffeeDir + '/**/*.coffee')
-        .pipe(coffee().on('error', gutil.log))
+gulp.task('js', function() {
+    return gulp.src(coffeeDir + '/**/*.js')
         .pipe(concat('main.js'))
-        .pipe(uglify())
+        //.pipe(uglify())
         .pipe(gulp.dest(targetJSDir))
         .pipe(notify('JS compiled, prefixed, and minified.'));
 });
@@ -91,10 +90,10 @@ gulp.task('js-libs', function() {
 /* Watcher */
 gulp.task('watch', function() {
     gulp.watch(lessDir + '/**/*.less', ['less']);
-    gulp.watch(coffeeDir + '/**/*.coffee', ['coffee']);
+    gulp.watch(coffeeDir + '/**/*.js', ['js']);
     gulp.watch('images-orig/**', ['images']);
     gulp.watch('app/**/*.php', ['phpunit']);
 });
 
 /* Default Task */
-gulp.task('default', ['less', 'js-libs' , 'coffee', 'phpunit', 'watch']);
+gulp.task('default', ['less', 'js-libs' , 'js', 'phpunit', 'watch']);

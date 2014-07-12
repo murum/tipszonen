@@ -103,7 +103,7 @@ class AdminController extends BaseController {
             Flash::error('Någonting gick fel vid uppdateringen, vänligen försök igen');
         }
 
-        return Redirect::back();
+        return Response::json(['success' => true]);
     }
 
     public function post_coupon_dividend($id)
@@ -120,6 +120,6 @@ class AdminController extends BaseController {
             Flash::error('Någonting gick fel vid uppdateringen, vänligen försök igen');
         }
 
-        return Redirect::back();
+        return Response::json(['success' => true]);
     }
 }

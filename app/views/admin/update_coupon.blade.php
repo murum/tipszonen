@@ -1,6 +1,7 @@
 @extends('layout.admin')
 
 @section('content')
+    <span id="admin-update-coupons"></span>
     <h1>Rätta kupongen</h1>
     <h2>Matcher</h2>
     <ul class="list-group">
@@ -96,4 +97,6 @@
         </li>
         @endforeach
     </ul>
+
+    <span class="btn btn-lg btn-success btn-block" id="submit-all">Spara samtliga inmatningar<span>
 @stop
