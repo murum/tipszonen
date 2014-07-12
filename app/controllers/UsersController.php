@@ -52,7 +52,7 @@ class UsersController extends \BaseController {
             $user->fill($input);
             $user->save();
 
-            Auth::login($user);
+            Auth::login($user, true);
 
         } catch (FormValidationException $e) {
             return Redirect::back()->withInput()->withErrors($e->getErrors());

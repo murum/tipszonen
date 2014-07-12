@@ -19,10 +19,13 @@ class SessionsController extends BaseController {
     public function store()
     {
         $input = Input::only('email', 'password');
-        $attempt = Auth::attempt([
-            'email' => $input['email'],
-            'password' => $input['password'],
-        ]);
+        $attempt = Auth::attempt(
+            [
+                'email' => $input['email'],
+                'password' => $input['password'],
+            ],
+            true
+        );
 
         if ( $attempt )
         {
@@ -70,7 +73,7 @@ class SessionsController extends BaseController {
             if( $user )
             {
                 Flash::success('Du loggades in.');
-                Auth::login($user);
+                Auth::login($user, true);
             } else
             {
                 $user = new User;
