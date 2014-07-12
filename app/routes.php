@@ -40,3 +40,4 @@ Route::post('admin/medlemmar/{id}', array('as' => 'admin.users.post_single', 'be
 Route::get('admin/liverattning', array('as' => 'admin.liverattning', 'before' => 'auth|auth.is_admin', 'uses' => 'AdminController@get_score'));
 Route::get('admin/uppdatera-resultat/{id}', array('as' => 'admin.liverattning.get_single', 'before' => 'auth|auth.is_admin', 'uses' => 'AdminController@get_coupon_score'));
 Route::post('admin/uppdatera-resultat/match/{id}', array('as' => 'admin.liverattning.update.match', 'before' => 'auth|auth.is_admin', 'uses' => 'AdminController@post_coupon_score'));
+Route::post('admin/uppdatera-resultat/utdelning/{id}', array('as' => 'admin.liverattning.update.dividend', 'before' => 'auth|auth.is_admin', 'uses' => 'AdminController@post_coupon_dividend'));

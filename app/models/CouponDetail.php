@@ -18,6 +18,11 @@ class CouponDetail extends Eloquent {
         return $this->hasMany('Coupon');
     }
 
+    public function dividends()
+    {
+        return $this->hasMany('CouponDividend');
+    }
+
     public function matches()
     {
         return $this->hasMany('Match');

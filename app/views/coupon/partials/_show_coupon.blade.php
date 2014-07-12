@@ -57,21 +57,22 @@
     </div>
     <div class="col-xs-12 col-sm-6">
         <h2>Utdelning.</h2>
-        @if( $has_dividends )
         <table class="table">
             <thead>
             <tr>
-                <th>Antal</th>
+                <th>Totalt antal</th>
+                <th>Din kupong</th>
                 <th>Rätt</th>
-                <th>Pris</th>
+                <th>Vinst</th>
             </tr>
             </thead>
             <tbody>
-            @foreach($dividends as $dividend)
+            @foreach($coupon->coupon_detail->dividends as $dividend)
             <tr>
-                <td>{{ $dividend['amount'] }}</td>
-                <td>{{ $dividend['rights'] }}</td>
-                <td>{{ $dividend['price'] }}</td>
+                <td>{{ $dividend->amount }} st</td>
+                <td>{{ $coupon->get_rows_from_rights($dividend->rights) }} st</td>
+                <td>{{ $dividend->rights }} rätt</td>
+                <td>{{ $dividend->win }} kr</td>
             </tr>
             @endforeach
             </tbody>
@@ -79,10 +80,5 @@
         <div class="alert {{ $win > 0 ? 'alert-success' : 'alert-danger' }}">
             {{ $win > 0 ? 'Din vinst' : 'Din förlust' }}: {{ $win }}kr
         </div>
-        @else
-        <div class="alert alert-danger">
-            Ingen utdelning ännu
-        </div>
-        @endif
     </div>
 </div>

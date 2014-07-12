@@ -187,6 +187,7 @@ class Coupon extends BaseModel {
             $coupon_detail->game_stop = $game_stop;
             if( $coupon_detail->save() )
             {
+
                 foreach ($matches as $match_data) {
                     $match = new Match;
                     $match->coupon_detail_id = $coupon_detail->id;
@@ -197,6 +198,9 @@ class Coupon extends BaseModel {
 
                     $match->save();
                 }
+
+                // Create dividends base.
+                $coupon_detail->createDividendsBase();
 
                 return true;
             } else
@@ -210,38 +214,45 @@ class Coupon extends BaseModel {
         }
     }
 
-    public function get_dividends()
+    public function set_dividends()
     {
-        $product_id = $this->coupon_detail->product->product;
-        $round = $this->coupon_detail->round;
-        $data = [];
-        $file = "https://svenskaspel.se/xternal/XMLresultat.asp";
-        $xml = new DOMDocument();
-
-        $xml->load($file . "?produktid=" . $product_id . "&omgang=" . $round);
-
-        if($xml->getElementsByTagName("fel")->item(0))
+        if( ! $this->coupon_detail->dividends()->first()->synced )
         {
-            return false;
+            $product_id = $this->coupon_detail->product->product;
+            $round = $this->coupon_detail->round;
+            $data = [];
+            $file = "https://svenskaspel.se/xternal/XMLresultat.asp";
+            $xml = new DOMDocument();
+
+            $xml->load($file . "?produktid=" . $product_id . "&omgang=" . $round);
+
+            if($xml->getElementsByTagName("fel")->item(0))
+            {
+                return false;
+            }
+
+            $winGroups = $xml->getElementsByTagName("vinstgrupp");
+
+            foreach ($winGroups as $winGroup) {
+                $rights = $winGroup->getElementsByTagName("beteckning")->item(0)->nodeValue;
+                $amount = $winGroup->getElementsByTagName("antal")->item(0)->nodeValue;
+                $price = $winGroup->getElementsByTagName("vinst")->item(0)->nodeValue;
+
+                $coupon_dividend = CouponDividend::
+                    whereCouponDetailId($this->coupon_detail->id)
+                    ->whereRights($rights)
+                    ->get()
+                    ->first();
+
+                $coupon_dividend->win = $price;
+                $coupon_dividend->amount = amount;
+                $coupon_dividend->synced = true;
+                $coupon_dividend->save();
+            }
         }
-
-        $winGroups = $xml->getElementsByTagName("vinstgrupp");
-
-        foreach ($winGroups as $winGroup) {
-            $rights = $winGroup->getElementsByTagName("beteckning")->item(0)->nodeValue;
-            $amount = $winGroup->getElementsByTagName("antal")->item(0)->nodeValue;
-            $price = $winGroup->getElementsByTagName("vinst")->item(0)->nodeValue;
-
-            $data[] = array(
-                'rights' => $rights,
-                'amount' => $amount,
-                'price' => $price
-            );
-        }
-        return $data;
     }
 
-    public function get_win($dividends)
+    public function get_win()
     {
         $results = $this->coupon_detail->get_row_result();
         if( $this->is_file() )
@@ -253,12 +264,12 @@ class Coupon extends BaseModel {
         }
         $rights = [];
 
-        foreach( $dividends as $dividend )
+        foreach( $this->coupon_detail->dividends as $dividend )
         {
-            $rights[(int)$dividend['rights']] = (int)str_replace(' ', '', $dividend['price']);
+            $rights[(int)$dividend->rights] = (int)str_replace(' ', '', $dividend->win);
         }
 
-        $sum = 0 - (int)$this->cost;
+        $sum = 0 - (int)$this->get_cost();
         foreach ($rows as $row)
         {
             if(array_key_exists($row['rights'], $rights))
@@ -268,6 +279,55 @@ class Coupon extends BaseModel {
         }
         return $sum;
     }
+
+    public function get_rows_from_rights($rights)
+    {
+        $rows = [];
+
+        if( ! $this->is_file() )
+        {
+            foreach($this->coupon_rows as $row)
+            {
+                if( self::get_rights($this->coupon_detail->get_row_result(), $row['row']) == $rights)
+                {
+                    $rows[] = [
+                        'row' => $row->row,
+                    ];
+                }
+            }
+        } else
+        {
+            foreach($this->getRowsFromFile($this->file_url) as $row)
+            {
+                if( self::get_rights($this->coupon_detail->get_row_result(), $row['row']) == $rights )
+                {
+
+                    $rows[] = [
+                        'row' => $row['row']
+                    ];
+                }
+            }
+        }
+        return count($rows);
+    }
+
+    public function get_cost()
+    {
+        if( $this->is_file() )
+        {
+            if( $this->cost )
+            {
+                return $this->cost;
+            } else
+            {
+                return count(self::getRowsFromFile($this->file_url));
+            }
+        } else
+        {
+            return $this->coupon_rows->count();
+        }
+    }
+
 
     public function generateOwnFileXML($svs_card)
     {

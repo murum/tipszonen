@@ -46,4 +46,54 @@
             </li>
         @endforeach
     </ul>
+    <h2>Utdelning</h2>
+    <ul class="list-group">
+        <li class="list-group-item">
+            <div class="row">
+                <div class="col-xs-12 col-sm-3">
+                    <h4>Antal rätt</h4>
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <h4>Vinst</h4>
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <h4>Totalt antal rader</h4>
+                </div>
+            </div>
+        </li>
+
+        @foreach($coupon->dividends as $dividend)
+        <li class="list-group-item">
+            {{ Form::model( $dividend, [ 'route' => [ 'admin.liverattning.update.dividend', $dividend->id ], 'class' => 'form-horizontal' ] ) }}
+                <div class="row">
+                    <div class="col-xs-12 col-sm-3">
+                        <div class="input-group">
+                            {{ Form::text('rights', null, ['class' => 'form-control', 'readonly' => true]) }}
+                            <div class="input-group-addon">Rätt</div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-3">
+                        <div class="input-group">
+                            {{ Form::text('win', null, ['class' => 'form-control']) }}
+                            <div class="input-group-addon">kr</div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-3">
+                        <div class="input-group">
+                            {{ Form::text('amount', null, ['class' => 'form-control']) }}
+                            <div class="input-group-addon">st</div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-3">
+                        {{ Form::submit('Spara', ['class' => 'pull-right btn btn-block btn-success']) }}
+                    </div>
+                </div>
+
+            {{ Form::close() }}
+        </li>
+        @endforeach
+    </ul>
 @stop

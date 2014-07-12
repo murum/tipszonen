@@ -83,7 +83,7 @@ class AdminController extends BaseController {
 
     public function get_coupon_score($id)
     {
-        $coupon = CouponDetail::with('matches')->whereId($id)->firstOrFail();
+        $coupon = CouponDetail::with('matches', 'dividends')->whereId($id)->firstOrFail();
         return View::make('admin.update_coupon', compact('coupon'));
     }
 
@@ -98,6 +98,23 @@ class AdminController extends BaseController {
         if( $match->save() )
         {
             Flash::success('Matchen uppdaterades');
+        } else
+        {
+            Flash::error('Någonting gick fel vid uppdateringen, vänligen försök igen');
+        }
+
+        return Redirect::back();
+    }
+
+    public function post_coupon_dividend($id)
+    {
+        $dividend = CouponDividend::find($id);
+        $dividend->win = Input::get('win');
+        $dividend->amount = Input::get('amount');
+
+        if( $dividend->save() )
+        {
+            Flash::success('Utdelningen uppdaterades');
         } else
         {
             Flash::error('Någonting gick fel vid uppdateringen, vänligen försök igen');

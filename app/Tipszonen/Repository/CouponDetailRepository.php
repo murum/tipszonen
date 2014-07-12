@@ -1,7 +1,7 @@
 <?php namespace Tipszonen\Repository;
 
 use Symfony\Component\Process\Exception\InvalidArgumentException;
-use DateTime;
+use DateTime, DB, Product;
 
 /**
  * Class CouponDetailRepository
@@ -44,7 +44,7 @@ trait CouponDetailRepository
         $rows = explode("\n", $txt_file);
         $product_name = trim($rows[0]);
 
-        return parent::whereProductId(\Product::whereName($product_name)->firstOrFail()->id)->firstOrFail();
+        return parent::whereProductId(Product::whereName($product_name)->firstOrFail()->id)->get()->last();
     }
 
     /**
@@ -104,6 +104,46 @@ trait CouponDetailRepository
         return $coupons;
     }
 
+    public function createDividendsBase()
+    {
+        if($this->matches->count() > 8)
+        {
+            $dividends = [
+                [
+                    'coupon_detail_id' => $this->id,
+                    'rights' => 13,
+                    'win' => 0
+                ],
+                [
+                    'coupon_detail_id' => $this->id,
+                    'rights' => 12,
+                    'win' => 0
+                ],
+                [
+                    'coupon_detail_id' => $this->id,
+                    'rights' => 11,
+                    'win' => 0
+                ],
+                [
+                    'coupon_detail_id' => $this->id,
+                    'rights' => 10,
+                    'win' => 0
+                ]
+            ];
+        } else
+        {
+            $dividends = [
+                [
+                    'coupon_detail_id' => $this->id,
+                    'rights' => 8,
+                    'win' => 0
+                ],
+            ];
+        }
+
+        DB::table('coupon_dividends')->insert($dividends);
+    }
+
     public function get_row_result()
     {
         $results = array();
@@ -111,7 +151,7 @@ trait CouponDetailRepository
 
         foreach($this->matches as $match)
         {
-            if( $match->start > $now->format('Y-m-d H:i:s') )
+            if( $match->start > $now->format('Y-m-d H:i:s') && ! $match->ended )
             {
                 $results[] = 0;
             } else

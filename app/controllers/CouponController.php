@@ -34,43 +34,32 @@ class CouponController extends BaseController {
         {
             $coupon = Coupon::customFindFile($id);
         }
-        $dividends = $coupon->get_dividends();
-        $has_dividends = $dividends ? true : false;
+        $dividends = $coupon->set_dividends();
         $results = $coupon->coupon_detail->get_row_result();
-
-        if($has_dividends)
-        {
-            $win = $coupon->get_win($dividends);
-        } else
-        {
-            $win = ($coupon->cost) * -1;
-        }
-
         $best_rows = $coupon->get_best_rows($row_amount_to_show, $results);
+        $win = $coupon->get_win();
 
-        return  View::make('coupon.show', compact('coupon', 'best_rows', 'dividends', 'has_dividends', 'results', 'win'));
+        return  View::make('coupon.show', compact('coupon', 'best_rows', 'dividends', 'results', 'win'));
     }
 
     public function show_update($id)
     {
         $row_amount_to_show = 8;
 
-        $coupon = Coupon::customFind($id);
-        $dividends = $coupon->get_dividends();
-        $has_dividends = $dividends ? true : false;
-        $results = $coupon->coupon_detail->get_row_result();
-
-        if($has_dividends)
+        $coupon = Coupon::find($id);
+        if( ! $coupon->is_file() )
         {
-            $win = $coupon->get_win($dividends);
+            $coupon = Coupon::customFind($id);
         } else
         {
-            $win = ($coupon->cost) * -1;
+            $coupon = Coupon::customFindFile($id);
         }
-
+        $dividends = $coupon->set_dividends();
+        $results = $coupon->coupon_detail->get_row_result();
         $best_rows = $coupon->get_best_rows($row_amount_to_show, $results);
+        $win = $coupon->get_win();
 
-        return  View::make('coupon.show_update', compact('coupon', 'best_rows', 'dividends', 'has_dividends', 'results', 'win'));
+        return  View::make('coupon.show_update', compact('coupon', 'best_rows', 'dividends', 'results', 'win'));
     }
 
     public function create($id)
