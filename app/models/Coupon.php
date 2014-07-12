@@ -157,7 +157,7 @@ class Coupon extends BaseModel {
         }
 
         $product_name = $xml->getElementsByTagName("produktnamn")->item(0);
-        
+
         if( isset( $product_name ) )
         {
             $data['product_name'] = $product_name->nodeValue;

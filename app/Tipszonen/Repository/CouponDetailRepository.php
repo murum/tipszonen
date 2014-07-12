@@ -1,6 +1,7 @@
 <?php namespace Tipszonen\Repository;
 
 use Symfony\Component\Process\Exception\InvalidArgumentException;
+use DateTime;
 
 /**
  * Class CouponDetailRepository
@@ -58,7 +59,7 @@ trait CouponDetailRepository
 
         foreach(parent::orderBy('id', 'DESC')->get() as $coupon)
         {
-            $now = new \DateTime();
+            $now = new DateTime();
 
             foreach($coupon->matches as $match) {
                 if($status == 'ongoing')
@@ -103,9 +104,21 @@ trait CouponDetailRepository
         return $coupons;
     }
 
+    /**
+     * @return string
+     */
     public function game_stop_formatted()
     {
         setlocale(LC_ALL, 'sv_SE.utf8');
         return ucfirst(strftime('%A %H:%M', strtotime($this->game_stop)));
+    }
+
+    /**
+     * @return bool
+     */
+    public function is_active()
+    {
+        $now = new DateTime();
+        return ($this->game_stop > $now->format('Y-m-d H:i:s'));
     }
 }

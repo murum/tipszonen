@@ -77,6 +77,12 @@ class CouponController extends BaseController {
     {
         $coupon = CouponDetail::with('matches')->whereProductId($id)->get()->last();
 
+        if( ! $coupon->is_active() )
+        {
+            Flash::error('Det finns ingen aktiv omgång att spela på för den här kupongtypen');
+            return Redirect::back();
+        }
+
         return View::make('coupon.create', compact('coupon'));
     }
 
@@ -84,6 +90,13 @@ class CouponController extends BaseController {
     {
         $coupon = new Coupon;
         $coupon_detail = CouponDetail::with('matches')->find($id);
+
+        if( ! $coupon_detail->is_active() )
+        {
+            Flash::error('Det finns ingen aktiv omgång att spela på för den här kupongtypen');
+            return Redirect::back();
+        }
+        
         $user = Auth::user();
 
         $coupon->coupon_detail_id = $coupon_detail->id;
