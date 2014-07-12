@@ -156,7 +156,16 @@ class Coupon extends BaseModel {
             return false;
         }
 
-        $data['product_name'] = $xml->getElementsByTagName("produktnamn")->item(0)->nodeValue;
+        $product_name = $xml->getElementsByTagName("produktnamn")->item(0);
+        
+        if( isset( $product_name ) )
+        {
+            $data['product_name'] = $product_name->nodeValue;
+        } else
+        {
+            return false;
+        }
+
         $round  = $xml->getElementsByTagName("omgang")->item(0)->nodeValue;
         $game_start = $xml->getElementsByTagName("spelstart")->item(0)->nodeValue;
         $game_stop = $xml->getElementsByTagName("spelstopp")->item(0)->nodeValue;
