@@ -16,8 +16,13 @@ class CouponRow extends Eloquent {
         $rights = 0;
         for($i = 0; $i<count($row); $i++)
         {
-            if($row[$i] == $results[$i])
-                $rights++;
+            if( gettype($results[$i]) != 'integer' )
+            {
+                if($row[$i] == $results[$i])
+                {
+                    $rights++;
+                }
+            }
         }
         return $rights;
     }

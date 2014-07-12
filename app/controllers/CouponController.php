@@ -96,7 +96,7 @@ class CouponController extends BaseController {
             Flash::error('Det finns ingen aktiv omgång att spela på för den här kupongtypen');
             return Redirect::back();
         }
-        
+
         $user = Auth::user();
 
         $coupon->coupon_detail_id = $coupon_detail->id;

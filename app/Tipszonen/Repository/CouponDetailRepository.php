@@ -104,6 +104,25 @@ trait CouponDetailRepository
         return $coupons;
     }
 
+    public function get_row_result()
+    {
+        $results = array();
+        $now = new DateTime();
+
+        foreach($this->matches as $match)
+        {
+            if( $match->start > $now->format('Y-m-d H:i:s') )
+            {
+                $results[] = 0;
+            } else
+            {
+                $results[] = $match->get_result();
+            }
+        }
+
+        return $results;
+    }
+
     /**
      * @return string
      */

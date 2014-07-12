@@ -22,15 +22,4 @@ class CouponDetail extends Eloquent {
     {
         return $this->hasMany('Match');
     }
-
-    public function get_row_result()
-    {
-        $results = array();
-
-        foreach($this->matches as $match) {
-            $results[] = $match->get_result();
-        }
-
-        return $results;
-    }
 }
