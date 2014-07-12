@@ -5,6 +5,8 @@ class CouponController extends BaseController {
     {
         ignore_user_abort(true);
         set_time_limit(240);
+
+        CouponDetail::createDividends();
     }
 
     public function index()

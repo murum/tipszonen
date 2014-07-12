@@ -144,6 +144,18 @@ trait CouponDetailRepository
         DB::table('coupon_dividends')->insert($dividends);
     }
 
+    public static function createDividends()
+    {
+        foreach( parent::with('dividends')->get() as $coupon_detail)
+        {
+            if( ! $coupon_detail->dividends->count())
+            {
+                $coupon_detail->createDividendsBase();
+            }
+        }
+    }
+
+
     public function get_row_result()
     {
         $results = array();
