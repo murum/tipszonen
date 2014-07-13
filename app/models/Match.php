@@ -103,6 +103,10 @@ class Match extends Eloquent
         {
             return 90;
         }
+        if($this->time == 0)
+        {
+            return 0;
+        }
 
         return (int)($calculated_time + $this->time);
     }
