@@ -24,6 +24,8 @@ Route::get('skapa-kupong/egna-filer', array('as' => 'own_files', 'before' => 'au
 Route::post('skapa-kupong/egna-filer', array('as' => 'post_own_file', 'before' => 'auth', 'uses' => 'CouponController@store_own_file'));
 Route::get('skapa-kupong/egna-filer/klar', array('as' => 'own_file.completed', 'before' => 'auth', 'uses' => 'CouponController@create_own_file_completed'));
 
+Route::get('kuponger/sok', array('as' => 'search.coupon', 'before' => 'auth', 'uses' => 'CouponController@search'));
+
 
 // Medlemmar
 Route::get('medlemmar', array('as' => 'member', 'uses' => 'MembersController@index'));

@@ -24,6 +24,20 @@ class CouponController extends BaseController {
         return View::make('coupon.index', compact('products', 'recent_coupons', 'user_coupons'));
     }
 
+    public function search()
+    {
+        $query = Input::get('search');
+        $coupons = Coupon::where('name', 'LIKE', '%'.$query.'%')->get();
+
+        // If there's just one coupon show the coupon
+        if( $coupons->count() == 1)
+        {
+            return Redirect::route('coupon.show', $coupons->first()->id);
+        }
+        // Else show the search result
+        return View::make('coupon.search', compact('coupons', 'query'));
+    }
+
     public function show($id)
     {
         $row_amount_to_show = 8;
