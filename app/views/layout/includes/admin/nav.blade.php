@@ -14,6 +14,17 @@
                 <li>{{ link_to_route('admin', 'Admin') }}</li>
                 <li>{{ link_to_route('admin.liverattning', 'Rättning') }}</li>
                 <li>{{ link_to_route('admin.users', 'Medlemmar') }}</li>
+                <li>
+                    <a href="http://tipszonen.se" target="_blank">
+                        Tipszonen
+                    </a>
+                </li>
+                <li>
+                    <a href="http://tipszonen.se/forum" target="_blank">
+                        Forum
+                    </a>
+                </li>
+
 
                 <li class="hidden dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>

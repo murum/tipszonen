@@ -22,6 +22,17 @@
                 @endif
                 <li>{{ link_to_route('member', 'Medlemmar') }}</li>
 
+                <li>
+                    <a href="http://tipszonen.se" target="_blank">
+                        Tipszonen
+                    </a>
+                </li>
+                <li>
+                    <a href="http://tipszonen.se/forum" target="_blank">
+                        Forum
+                    </a>
+                </li>
+
                 <li class="hidden dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
                     <ul class="dropdown-menu">
