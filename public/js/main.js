@@ -68,19 +68,6 @@ $(function () {
     }
 
     if ($("span#admin-update-coupons").length) {
-        $("form").on('submit', function (e) {
-            var formURL, method, postData;
-            postData = $(this).serializeArray();
-            formURL = $(this).attr("action");
-            method = $(this).attr("method");
-            $.ajax({
-                url: formURL,
-                type: method,
-                data: postData
-            });
-            e.preventDefault();
-            return false;
-        });
         $("span#submit-all").on('click', function () {
             var delay, elements, index;
             elements = $("body").find("form");

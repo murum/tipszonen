@@ -7,6 +7,7 @@
         <th>Bortalag</th>
         <th>Resultat</th>
         <th>Tecken</th>
+        <th>Tid</th>
     </tr>
     </thead>
     <tbody>
@@ -18,6 +19,7 @@
         <td>{{ $match->away_team }}</td>
         <td>{{ $match->home_score }} - {{ $match->away_score }}</td>
         <td>{{ $match->get_result() }}</td>
+        <td>{{$match->get_match_time()}}'</td>
     </tr>
     @endforeach
     </tbody>

@@ -100,10 +100,10 @@ class AdminController extends BaseController {
             Flash::success('Matchen uppdaterades');
         } else
         {
-            Flash::error('Någonting gick fel vid uppdateringen, vänligen försök igen');
+            Flash::error('Någonting gick fel vid uppdateringen, vänligen försök igen... (kanske uppdaterade du inte tiden)');
         }
 
-        return Response::json(['success' => true]);
+        return Redirect::back();
     }
 
     public function post_coupon_dividend($id)
