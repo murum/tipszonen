@@ -16,11 +16,11 @@
                 <li>{{ link_to_route('admin.users', 'Medlemmar') }}</li>
                 <li>
                     <a href="http://tipszonen.se" target="_blank">
-                        Tipszonen
+                        Krönikor
                     </a>
                 </li>
                 <li>
-                    <a href="http://tipszonen.se/forum" target="_blank">
+                    <a href="http://tipszonen.se/forum/vb" target="_blank">
                         Forum
                     </a>
                 </li>
