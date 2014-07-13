@@ -3,7 +3,13 @@
 class HomeController extends BaseController {
 	public function index()
 	{
-		return View::make('hello');
+        if( ! Auth::guest() )
+        {
+		    return Redirect::route('coupon');
+        } else
+        {
+            return View::make('hello');
+        }
 	}
 
 }
