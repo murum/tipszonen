@@ -18,6 +18,16 @@
         </div>
 
         <div class="col-xs-12 col-sm-3">
+            <h3>Kuponger</h3>
+            @if( $member->hasCoupons() )
+                @foreach($member->coupons as $coupon)
+                    @include('coupon/partials/_coupon')
+                @endforeach
+            @else
+                <div class="alert alert-info">
+                    Användaren har inte skapat några kuponger.
+                </div>
+            @endif
         </div>
     </div>
 @stop

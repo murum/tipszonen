@@ -14,14 +14,14 @@ class CouponController extends BaseController {
         $products = Product::all();
 
         $recent_coupons = Coupon::recent_coupons();
-        $user_coupons = Coupon::user_coupons();
+        $user = Auth::user();
 
         foreach($products as $product)
         {
             Coupon::_create_new($product->product);
         }
 
-        return View::make('coupon.index', compact('products', 'recent_coupons', 'user_coupons'));
+        return View::make('coupon.index', compact('products', 'recent_coupons', 'user'));
     }
 
     public function search()

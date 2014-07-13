@@ -24,11 +24,17 @@
             <h3>Hitta kupong</h3>
             @include('coupon/partials/_search_coupon')
 
-            <h3>Mina senaste kuponger</h3>
+            <h3>Dina senaste kuponger</h3>
             <div class="list-group">
-                @foreach($user_coupons as $coupon)
-                    @include('coupon/partials/_coupon')
-                @endforeach
+                @if( $user->hasCoupons() )
+                    @foreach($user as $coupon)
+                        @include('coupon/partials/_coupon')
+                    @endforeach
+                @else
+                    <div class="alert alert-info">
+                        Du har inte skapat några kuponger.
+                    </div>
+                @endif
             </div>
 
             <h3>Senaste kupongerna</h3>

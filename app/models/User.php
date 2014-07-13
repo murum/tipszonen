@@ -67,9 +67,18 @@ class User extends BaseModel implements UserInterface, RemindableInterface {
         return $this->belongsToMany('Role');
     }
 
+    public function coupons()
+    {
+        return $this->hasMany('Coupon');
+    }
+
     /** ROLES **/
     public function isAdmin() {
         return $this->hasRole(Role::ADMIN);
+    }
+
+    public function hasCoupons() {
+        return $this->coupons->count();
     }
 
     public function attempts()

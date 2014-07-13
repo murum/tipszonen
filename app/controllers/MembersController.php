@@ -43,9 +43,9 @@ class MembersController extends \BaseController {
 	public function show($id)
 	{
 		$member = User::findOrFail($id);
+        $coupons = Coupon::whereUserId($member->id)->get();
 
-        return View::make('members.show')
-            ->withMember($member);
+        return View::make('members.show', compact('member', 'coupons'));
 	}
 
 	/**
