@@ -27,7 +27,7 @@
             <h3>Dina senaste kuponger</h3>
             <div class="list-group">
                 @if( $user->hasCoupons() )
-                    @foreach($user as $coupon)
+                    @foreach($user->coupons as $coupon)
                         @include('coupon/partials/_coupon')
                     @endforeach
                 @else
