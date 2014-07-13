@@ -60,7 +60,7 @@ trait CouponDetailRepository
         foreach(parent::orderBy('id', 'DESC')->get() as $coupon)
         {
             $now = new DateTime();
-            $now->modify('-30 minutes');
+            $now->modify('+30 minutes');
 
             foreach($coupon->matches as $match) {
                 if($status == 'ongoing')
