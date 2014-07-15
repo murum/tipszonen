@@ -18,6 +18,9 @@
             </div>
         </div>
     </div>
+
+    @include('session/modals/_login')
+
     {{ HTML::script('/js/libs.js') }}
     {{ HTML::script('/js/main.js') }}
 </body>

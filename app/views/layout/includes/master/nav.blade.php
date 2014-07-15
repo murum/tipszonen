@@ -60,7 +60,9 @@
                 </a>
             @else
                 <ul class="nav navbar-nav navbar-right">
-                    <li>{{ link_to_route('login', 'Logga in') }}</li>
+                    <li>
+                        <a href="#loginModal" data-toggle='modal' data-target='#loginModal'>Logga in</a>
+                    </li>
                     <li>{{ link_to_route('register', 'Registrera dig') }}</li>
                 </ul>
             @endif

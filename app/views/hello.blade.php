@@ -10,7 +10,7 @@
         </p>
         <p>
             {{ link_to_route('register', 'Registrera dig', null, ['class' => 'btn btn-lg btn-success']) }}
-            {{ link_to_route('login', 'Logga in', null, ['class' => 'btn btn-lg btn-default']) }}
+            <span class="btn btn-lg btn-default" data-toggle='modal' data-target='#loginModal'>Logga in</span>
         </p>
     </div>
 @stop
