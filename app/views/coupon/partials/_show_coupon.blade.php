@@ -71,10 +71,10 @@
             <tbody>
             @foreach($coupon->coupon_detail->dividends as $dividend)
             <tr>
-                <td>{{ $dividend->amount }} st</td>
+                <td>{{ number_format($dividend->amount, 0, '.', '.') }} st</td>
                 <td>{{ $coupon->get_rows_from_rights($dividend->rights) }} st</td>
                 <td>{{ $dividend->rights }} rätt</td>
-                <td>{{ $dividend->win }} kr</td>
+                <td>{{ number_format($dividend->win, 0, '.', '.') }} kr</td>
             </tr>
             @endforeach
             </tbody>

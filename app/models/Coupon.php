@@ -235,17 +235,17 @@ class Coupon extends BaseModel {
 
             foreach ($winGroups as $winGroup) {
                 $rights = $winGroup->getElementsByTagName("beteckning")->item(0)->nodeValue;
-                $amount = $winGroup->getElementsByTagName("antal")->item(0)->nodeValue;
-                $price = $winGroup->getElementsByTagName("vinst")->item(0)->nodeValue;
+                $amount = (int)str_replace(' ', '', $winGroup->getElementsByTagName("antal")->item(0)->nodeValue);
+                $price = (int)str_replace(' ', '', $winGroup->getElementsByTagName("vinst")->item(0)->nodeValue);
 
                 $coupon_dividend = CouponDividend::
                     whereCouponDetailId($this->coupon_detail->id)
-                    ->whereRights($rights)
+                    ->whereRights((int)$rights)
                     ->get()
                     ->first();
 
                 $coupon_dividend->win = $price;
-                $coupon_dividend->amount = amount;
+                $coupon_dividend->amount = $amount;
                 $coupon_dividend->synced = true;
                 $coupon_dividend->save();
             }
