@@ -60,6 +60,20 @@ class Coupon extends BaseModel {
         }
         return $rights;
     }
+    public function get_row_potential($results, $row)
+    {
+        $row = explode(',', $row);
+
+        $rights = 0;
+        for($i = 0; $i<count($row); $i++)
+        {
+            if($row[$i] == $results[$i] || gettype($results[$i]) == 'integer')
+            {
+                $rights++;
+            }
+        }
+        return $rights;
+    }
 
     public function get_best_rows($count, $results)
     {
@@ -70,8 +84,9 @@ class Coupon extends BaseModel {
             foreach($this->coupon_rows as $row)
             {
                 $unsorted_rows[] = [
-                    'row' => $row->row,
-                    'rights' => $row->get_rights($results)
+                    'row' => $this->get_best_row_details($row->row),
+                    'rights' => $row->get_rights($results),
+                    'potential' => $row->get_potential($results, $row['row'])
                 ];
             }
         } else
@@ -79,14 +94,37 @@ class Coupon extends BaseModel {
             foreach($this->getRowsFromFile($this->file_url) as $row)
             {
                 $unsorted_rows[] = [
-                    'row' => $row['row'],
-                    'rights' => self::get_rights($results, $row['row'])
+                    'row' => $this->get_best_row_details($row['row']),
+                    'rights' => self::get_rights($results, $row['row']),
+                    'potential' => $this->get_row_potential($results, $row['row'])
                 ];
             }
         }
         $sorted_rows = tz_array_sort($unsorted_rows, 'rights');
 
         return array_slice($sorted_rows, 0, $count);
+    }
+
+    public function get_best_row_details($row)
+    {
+        $row = explode(',', $row);
+        $i = 0;
+        foreach($this->coupon_detail->matches as $match)
+        {
+            $bet = $row[$i];
+            $row[$i] = [];
+            $row[$i]['bet'] = $bet;
+            $row[$i]['result'] = $match->get_result();
+            $row[$i]['right'] = ($row[$i]['bet'] === $row[$i]['result']) ? true : false;
+
+            if( $match->is_invalid() )
+            {
+                $row[$i]['right'] = 'not_valid';
+            }
+
+            $i++;
+        }
+        return $row;
     }
 
     public function get_best_row_rights()

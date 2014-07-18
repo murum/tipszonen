@@ -160,11 +160,10 @@ trait CouponDetailRepository
     public function get_row_result()
     {
         $results = array();
-        $now = new DateTime();
 
         foreach($this->matches as $match)
         {
-            if( $match->start > $now->format('Y-m-d H:i:s') && ! $match->ended )
+            if( $match->is_invalid() )
             {
                 $results[] = 0;
             } else

@@ -61,6 +61,12 @@ class Match extends Eloquent
         }
     }
 
+    public function is_invalid()
+    {
+        $now = new DateTime();
+        return ($this->start > $now->format('Y-m-d H:i:s') && ! $this->ended);
+    }
+
     public function get_match_status()
     {
         if($this->ended)

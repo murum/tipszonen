@@ -26,4 +26,18 @@ class CouponRow extends Eloquent {
         }
         return $rights;
     }
+    public function get_potential($results)
+    {
+        $row = explode(',', $this->row);
+
+        $rights = 0;
+        for($i = 0; $i<count($row); $i++)
+        {
+            if ($row[$i] == $results[$i] || gettype($results[$i]) == 'integer')
+            {
+                $rights++;
+            }
+        }
+        return $rights;
+    }
 }

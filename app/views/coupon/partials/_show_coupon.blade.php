@@ -43,15 +43,32 @@
         <table class="table">
             <thead>
             <tr>
-                <th>Rad</th>
-                <th>Rätt</th>
+                @foreach($coupon->coupon_detail->matches as $match)
+                <th>
+                    {{ $match->matchnumber }}
+                </th>
+                @endforeach
+                <th class="text-right">Rätt</th>
+                <th class="text-right">Kan få</th>
             </tr>
             </thead>
             <tbody>
             @foreach($best_rows as $row)
             <tr>
-                <td>{{ $row['row'] }}</td>
-                <td>{{ $row['rights'] }}</td>
+                @foreach($row['row'] as $match_number)
+                <td>
+                    @if(gettype($match_number['right']) == 'boolean')
+                        <span class="{{ ($match_number['right']) ? 'match-help-on_going' : 'match-help-ended' }}">
+                    @else
+                        <span>
+                    @endif
+
+                        {{ $match_number['bet'] }}
+                    </span>
+                </td>
+                @endforeach
+                <td align="right">{{ $row['rights'] }}</td>
+                <td align="right">{{ $row['potential'] }}</td>
             </tr>
             @endforeach
             </tbody>
