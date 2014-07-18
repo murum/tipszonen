@@ -23,7 +23,7 @@ class Match extends Eloquent
         static::saving(function($model)
         {
             // if the model is not changed
-            if ( $model->time == $model->getOriginal()['time'] )
+            if ( isset($model->getOriginal()['time']) && $model->time == $model->getOriginal()['time'] )
             {
                 return false;
             }
