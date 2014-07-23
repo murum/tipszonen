@@ -1,9 +1,11 @@
 <?php
 use \Tipszonen\Repository\CouponRepository;
+
 class Coupon extends BaseModel {
     use CouponRepository;
 
     protected $fillable = [];
+
     protected static $rules = [
         'name' => 'required|alpha_num_spaces|min:3',
     ];
@@ -12,9 +14,9 @@ class Coupon extends BaseModel {
     {
         parent::boot();
 
-        static::creating(function($model)
+        static::creating(function ($model)
         {
-            if($model->validate())
+            if ($model->validate())
             {
                 return $model;
             }
@@ -45,86 +47,102 @@ class Coupon extends BaseModel {
 
     public function get_rights($results, $row)
     {
-        $row = explode(',', $row);
-
+        $d = $row ^ $results;
         $rights = 0;
-        for($i = 0; $i<count($row); $i++)
+
+        for ($i = 0, $n = strlen($d); $i != $n; ++ $i)
         {
-            if( gettype($results[$i]) != 'integer' )
-            {
-                if($row[$i] == $results[$i])
-                {
-                    $rights++;
-                }
-            }
+            $d[$i] === "\0" ? $rights ++ : null;
         }
+
         return $rights;
+
     }
-    public function get_row_potential($results, $row)
-    {
-        $row = explode(',', $row);
 
-        $rights = 0;
-        for($i = 0; $i<count($row); $i++)
-        {
-            if($row[$i] == $results[$i] || gettype($results[$i]) == 'integer')
-            {
-                $rights++;
-            }
-        }
-        return $rights;
+    public function get_row_potential($results)
+    {
+        $results = implode($results);
+        $potentials = substr_count($results, '0');
+
+        return $potentials;
     }
 
     public function get_best_rows($count, $results)
     {
         $unsorted_rows = [];
+        $win = 0;
+        $total_win = 0;
 
-        if( ! $this->is_file() )
+        if (!$this->is_file())
         {
-            foreach($this->coupon_rows as $row)
+            $results_string = implode('', $results);
+            $potential = $this->get_row_potential($results);
+            $total_win = $this->coupon_rows->count() * -1;
+
+            $rows = $this->coupon_rows->toArray();
+
+            foreach ($rows as $row)
             {
+                $row = trim(str_replace(',', '', $row['row']));
+                $rights = self::get_rights($results_string, $row);
+                $win = $this->get_win($rights);
                 $unsorted_rows[] = [
-                    'row' => $this->get_best_row_details($row->row),
-                    'rights' => $row->get_rights($results),
-                    'potential' => $row->get_potential($results, $row['row'])
+                    'row'       => $row,
+                    'rights'    => $rights,
+                    'potential' => ($rights + $potential),
+                    'win'       => $win
                 ];
             }
         } else
         {
-            foreach($this->getRowsFromFile($this->file_url) as $row)
+            $rows = $this->getRowsFromFile($this->file_url);
+            $results_string = implode('', $results);
+            $potential = $this->get_row_potential($results);
+            $total_win = count($rows) * -1;
+            foreach ($rows as $row)
             {
+                $row = trim(str_replace(',', '', $row['row']));
+                $rights = self::get_rights($results_string, $row);
+                $win = $this->get_win($rights);
                 $unsorted_rows[] = [
-                    'row' => $this->get_best_row_details($row['row']),
-                    'rights' => self::get_rights($results, $row['row']),
-                    'potential' => $this->get_row_potential($results, $row['row'])
+                    'row'       => $row,
+                    'rights'    => $rights,
+                    'potential' => ($potential + $rights),
+                    'win'       => $win
                 ];
+                $total_win += $win;
             }
         }
         $sorted_rows = tz_array_sort($unsorted_rows, 'rights');
 
-        return array_slice($sorted_rows, 0, $count);
+        $rows_to_return = array_slice($sorted_rows, 0, $count);
+
+        for ($i = 0; $i < count($rows_to_return); $i++)
+        {
+            $rows_to_return[$i]['row'] = $this->get_best_row_detail($rows_to_return[$i]['row'], $results_string);
+        }
+
+        return [$rows_to_return, $total_win];
     }
 
-    public function get_best_row_details($row)
+    public function get_best_row_detail($row, $result)
     {
-        $row = explode(',', $row);
-        $i = 0;
-        foreach($this->coupon_detail->matches as $match)
+        $array = [];
+        for ($i = 0; $i < strlen($result); $i++)
         {
             $bet = $row[$i];
-            $row[$i] = [];
-            $row[$i]['bet'] = $bet;
-            $row[$i]['result'] = $match->get_result();
-            $row[$i]['right'] = ($row[$i]['bet'] === $row[$i]['result']) ? true : false;
+            $array[$i] = [];
+            $array[$i]['bet'] = $bet;
+            $array[$i]['result'] = $result[$i];
+            $array[$i]['right'] = ($array[$i]['bet'] === $array[$i]['result']) ? true : false;
 
-            if( $match->is_invalid() )
+            if ($array[$i]['result'] === '0')
             {
-                $row[$i]['right'] = 'not_valid';
+                $array[$i]['right'] = 'not_valid';
             }
-
-            $i++;
         }
-        return $row;
+
+        return $array;
     }
 
     public function get_best_row_rights()
@@ -135,11 +153,11 @@ class Coupon extends BaseModel {
     public function createCouponRows($rows)
     {
         $rows_to_add = [];
-        foreach($rows as $row_to_add)
+        foreach ($rows as $row_to_add)
         {
             $rows_to_add[] = [
                 'coupon_id' => $this->id,
-                'row' => trim($row_to_add)
+                'row'       => trim($row_to_add)
             ];
         }
 
@@ -155,16 +173,16 @@ class Coupon extends BaseModel {
         $rows_to_return = [];
         array_shift($rows);
 
-        foreach($rows as $row => $data)
+        foreach ($rows as $row => $data)
         {
             //get row data
             $row_data = explode(',', $data);
             $row_value = "";
-            for( $i = 0; $i < count($row_data); $i++)
+            for ($i = 0; $i < count($row_data); $i ++)
             {
-                if($i > 0)
+                if ($i > 0)
                 {
-                    if($i == count($row_data) - 1)
+                    if ($i == count($row_data) - 1)
                     {
                         $row_value .= $row_data[$i];
                     } else
@@ -173,11 +191,11 @@ class Coupon extends BaseModel {
                     }
                 }
             }
-            if($row_value != "")
+            if ($row_value != "")
             {
                 $rows_to_return[] = [
                     'system_type' => 'E',
-                    'row' => $row_value
+                    'row'         => $row_value
                 ];
             }
         }
@@ -194,14 +212,14 @@ class Coupon extends BaseModel {
     {
         $file = "https://svenskaspel.se/xternal/XMLkupong.asp";
         $xml = new DOMDocument();
-        if(!$xml->load($file."?produktid=".$product_id))
+        if (!$xml->load($file . "?produktid=" . $product_id))
         {
             return false;
         }
 
         $product_name = $xml->getElementsByTagName("produktnamn")->item(0);
 
-        if( isset( $product_name ) )
+        if (isset($product_name))
         {
             $data['product_name'] = $product_name->nodeValue;
         } else
@@ -209,12 +227,12 @@ class Coupon extends BaseModel {
             return false;
         }
 
-        $round  = $xml->getElementsByTagName("omgang")->item(0)->nodeValue;
+        $round = $xml->getElementsByTagName("omgang")->item(0)->nodeValue;
         $game_start = $xml->getElementsByTagName("spelstart")->item(0)->nodeValue;
         $game_stop = $xml->getElementsByTagName("spelstopp")->item(0)->nodeValue;
         $game_week = $xml->getElementsByTagName("spelvecka")->item(0)->nodeValue;
 
-        if( ! self::CheckIfCouponDetailExists($product_id, $round))
+        if (!self::CheckIfCouponDetailExists($product_id, $round))
         {
             $matches = $xml->getElementsByTagName("match");
             $coupon_detail = new CouponDetail;
@@ -223,10 +241,11 @@ class Coupon extends BaseModel {
             $coupon_detail->game_week = $game_week;
             $coupon_detail->game_start = $game_start;
             $coupon_detail->game_stop = $game_stop;
-            if( $coupon_detail->save() )
+            if ($coupon_detail->save())
             {
 
-                foreach ($matches as $match_data) {
+                foreach ($matches as $match_data)
+                {
                     $match = new Match;
                     $match->coupon_detail_id = $coupon_detail->id;
                     $match->matchnumber = $match_data->getElementsByTagName("matchnummer")->item(0)->nodeValue;
@@ -245,8 +264,7 @@ class Coupon extends BaseModel {
             {
                 return false;
             }
-        }
-        else
+        } else
         {
             return false;
         }
@@ -254,7 +272,7 @@ class Coupon extends BaseModel {
 
     public function set_dividends()
     {
-        if( ! $this->coupon_detail->dividends()->first()->synced )
+        if (!$this->coupon_detail->dividends()->first()->synced)
         {
             $product_id = $this->coupon_detail->product->product;
             $round = $this->coupon_detail->round;
@@ -264,21 +282,22 @@ class Coupon extends BaseModel {
 
             $xml->load($file . "?produktid=" . $product_id . "&omgang=" . $round);
 
-            if($xml->getElementsByTagName("fel")->item(0))
+            if ($xml->getElementsByTagName("fel")->item(0))
             {
                 return false;
             }
 
             $winGroups = $xml->getElementsByTagName("vinstgrupp");
 
-            foreach ($winGroups as $winGroup) {
+            foreach ($winGroups as $winGroup)
+            {
                 $rights = $winGroup->getElementsByTagName("beteckning")->item(0)->nodeValue;
-                $amount = (int)str_replace(' ', '', $winGroup->getElementsByTagName("antal")->item(0)->nodeValue);
-                $price = (int)str_replace(' ', '', $winGroup->getElementsByTagName("vinst")->item(0)->nodeValue);
+                $amount = (int) str_replace(' ', '', $winGroup->getElementsByTagName("antal")->item(0)->nodeValue);
+                $price = (int) str_replace(' ', '', $winGroup->getElementsByTagName("vinst")->item(0)->nodeValue);
 
                 $coupon_dividend = CouponDividend::
-                    whereCouponDetailId($this->coupon_detail->id)
-                    ->whereRights((int)$rights)
+                whereCouponDetailId($this->coupon_detail->id)
+                    ->whereRights((int) $rights)
                     ->get()
                     ->first();
 
@@ -290,70 +309,58 @@ class Coupon extends BaseModel {
         }
     }
 
-    public function get_win()
+    public function get_win($rights)
     {
-        $results = $this->coupon_detail->get_row_result();
-        if( $this->is_file() )
+        foreach ($this->coupon_detail->dividends as $dividend)
         {
-            $rows = $this->get_best_rows($this->getRowsFromFile($this->file_url), $results);
-        } else
-        {
-            $rows = $this->get_best_rows($this->coupon_rows->count(), $results);
-        }
-        $rights = [];
-
-        foreach( $this->coupon_detail->dividends as $dividend )
-        {
-            $rights[(int)$dividend->rights] = (int)str_replace(' ', '', $dividend->win);
-        }
-
-        $sum = 0 - (int)$this->get_cost();
-        foreach ($rows as $row)
-        {
-            if(array_key_exists($row['rights'], $rights))
-            {
-                $sum += $rights[$row['rights']];
+            if($dividend->rights == $rights) {
+                return $dividend->win;
             }
         }
-        return $sum;
+        return 0;
     }
 
     public function get_rows_from_rights($rights)
     {
-        $rows = [];
+        $amount_rows = [];
 
-        if( ! $this->is_file() )
+        if (!$this->is_file())
         {
-            foreach($this->coupon_rows as $row)
+            $row_result = implode('', $this->coupon_detail->get_row_result());
+            foreach ($this->coupon_rows->toArray() as $row)
             {
-                if( self::get_rights($this->coupon_detail->get_row_result(), $row['row']) == $rights)
+                $rows = trim(str_replace(',', '', $row['row']));
+                if (self::get_rights($row_result, $row) == $rights)
                 {
-                    $rows[] = [
-                        'row' => $row->row,
+                    $amount_rows[] = [
+                        'row' => $row,
                     ];
                 }
             }
         } else
         {
-            foreach($this->getRowsFromFile($this->file_url) as $row)
+            $rows = $this->getRowsFromFile($this->file_url);
+            $row_result = implode('', $this->coupon_detail->get_row_result());
+            foreach ($rows as $row)
             {
-                if( self::get_rights($this->coupon_detail->get_row_result(), $row['row']) == $rights )
+                $row = trim(str_replace(',', '', $row['row']));
+                if (self::get_rights($row_result, $row) == (int)$rights)
                 {
-
-                    $rows[] = [
-                        'row' => $row['row']
+                    $amount_rows[] = [
+                        'row' => $row
                     ];
                 }
             }
         }
-        return count($rows);
+
+        return count($amount_rows);
     }
 
     public function get_cost()
     {
-        if( $this->is_file() )
+        if ($this->is_file())
         {
-            if( $this->cost )
+            if ($this->cost)
             {
                 return $this->cost;
             } else
@@ -375,10 +382,10 @@ class Coupon extends BaseModel {
         $product = $this->coupon_detail()->first()->product->product;
         $product_name = $this->coupon_detail()->first()->product->name;
 
-        $xml = '<egnarader klient="'.$progName.'" spelkort="'.$svs_card.'" ombud="'.$ombud.'">';
-        $xml .= '<spel produkt="'.$product.'" produktnamn="'.$product_name.'">';
+        $xml = '<egnarader klient="' . $progName . '" spelkort="' . $svs_card . '" ombud="' . $ombud . '">';
+        $xml .= '<spel produkt="' . $product . '" produktnamn="' . $product_name . '">';
 
-        if( ! $this->is_file() )
+        if (!$this->is_file())
         {
             $xml .= $this->generateXMLRows($this->coupon_rows()->get());
         } else
@@ -393,19 +400,21 @@ class Coupon extends BaseModel {
 
         return $xml;
     }
+
     public function generateXMLRows($rows)
     {
         $string = '';
-        foreach($rows as $row)
+        foreach ($rows as $row)
         {
-            if( ! $this->is_file() )
+            if (!$this->is_file())
             {
-                $string .= "<rad system='".$row->system_type."'>".$row->row."</rad>";
+                $string .= "<rad system='" . $row->system_type . "'>" . $row->row . "</rad>";
             } else
             {
-                $string .= "<rad system='".$row['system_type']."'>".$row['row']."</rad>";
+                $string .= "<rad system='" . $row['system_type'] . "'>" . $row['row'] . "</rad>";
             }
         }
+
         return $string;
     }
 
@@ -422,8 +431,9 @@ class Coupon extends BaseModel {
                 'content' => $this->generateOwnFileXML($svs_card),
             ),
         );
-        $context  = stream_context_create($options);
+        $context = stream_context_create($options);
         $result = file_get_contents($url, false, $context);
+
         return $this->parseXMLResultAfterUpload($result);
     }
 
@@ -436,7 +446,8 @@ class Coupon extends BaseModel {
         $cost = $dom->getElementsByTagName("kostnad")->item(0)->nodeValue;
         $this->play_url = $url;
         $this->cost = $cost;
-        if( $this->save() ) {
+        if ($this->save())
+        {
             return true;
         } else
         {
@@ -450,7 +461,7 @@ class Coupon extends BaseModel {
         {
             CouponDetail::whereProductId(Product::whereProduct($product_id)->first()->id)->whereRound($round)->firstOrFail();
 
-        } catch(Exception $ex)
+        } catch (Exception $ex)
         {
             return false;
         }

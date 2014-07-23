@@ -165,7 +165,7 @@ trait CouponDetailRepository
         {
             if( $match->is_invalid() )
             {
-                $results[] = 0;
+                $results[] = '0';
             } else
             {
                 $results[] = $match->get_result();

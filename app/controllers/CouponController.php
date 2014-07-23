@@ -52,10 +52,11 @@ class CouponController extends BaseController {
         }
         $dividends = $coupon->set_dividends();
         $results = $coupon->coupon_detail->get_row_result();
-        $best_rows = $coupon->get_best_rows($row_amount_to_show, $results);
-        $win = $coupon->get_win();
+        $array = $coupon->get_best_rows($row_amount_to_show, $results);
+        $best_rows = $array[0];
+        $win = $array[1];
 
-        return  View::make('coupon.show', compact('coupon', 'best_rows', 'dividends', 'results', 'win'));
+        return  View::make('coupon.show', compact('coupon', 'dividends', 'best_rows', 'win'));
     }
 
     public function show_update($id)
@@ -72,10 +73,11 @@ class CouponController extends BaseController {
         }
         $dividends = $coupon->set_dividends();
         $results = $coupon->coupon_detail->get_row_result();
-        $best_rows = $coupon->get_best_rows($row_amount_to_show, $results);
-        $win = $coupon->get_win();
+        $array = $coupon->get_best_rows($row_amount_to_show, $results);
+        $best_rows = $array[0];
+        $win = $array[1];
 
-        return  View::make('coupon.show_update', compact('coupon', 'best_rows', 'dividends', 'results', 'win'));
+        return  View::make('coupon.show_update', compact('coupon', 'dividends', 'best_rows', 'win'));
     }
 
     public function create($id)
