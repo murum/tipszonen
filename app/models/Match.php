@@ -47,11 +47,11 @@ class Match extends Eloquent
 
     public function get_result()
     {
-        if($this->home_score > $this->away_score)
+        if((int)$this->home_score > (int)$this->away_score)
         {
             return "1";
         }
-        else if($this->home_score == $this->away_score)
+        else if((int)$this->home_score == (int)$this->away_score)
         {
             return "X";
         }
