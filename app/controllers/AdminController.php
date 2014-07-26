@@ -96,6 +96,7 @@ class AdminController extends BaseController {
         $matches = Match::
             where('home_team', '=', $match->home_team)
             ->where('away_team', '=', $match->away_team)
+            ->where('start', '=', $match->start)
             ->get();
 
         foreach($matches as $match) {
