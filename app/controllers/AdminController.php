@@ -42,7 +42,7 @@ class AdminController extends BaseController {
         $user = User::find($id);
         $user->detachRoles(Role::all());
 
-        if(User::destroy($id))
+        if (User::destroy($id))
         {
             Flash::success('Användaren togs bort');
         } else
@@ -62,6 +62,7 @@ class AdminController extends BaseController {
         $user->attachRoles($input['roles']);
 
         Flash::success('Användarens roller uppdaterades');
+
         return Redirect::back();
     }
 
@@ -84,6 +85,7 @@ class AdminController extends BaseController {
     public function get_coupon_score($id)
     {
         $coupon = CouponDetail::with('matches', 'dividends')->whereId($id)->firstOrFail();
+
         return View::make('admin.update_coupon', compact('coupon'));
     }
 
@@ -95,7 +97,15 @@ class AdminController extends BaseController {
         $match->away_score = Input::get('away_score');
         $match->ended = Input::get('ended');
 
-        if( $match->save() )
+        // if the model is not changed
+        if ( $match->home_score != $match->getOriginal()['home_score']
+            || $match->away_score != $match->getOriginal()['away_score']
+            || $match->time != $match->getOriginal()['time'] )
+        {
+            $match->match_updated = new DateTime();
+        }
+
+        if ($match->save())
         {
             Flash::success('Matchen uppdaterades');
         } else
@@ -112,11 +122,12 @@ class AdminController extends BaseController {
         $dividend->win = Input::get('win');
         $dividend->amount = Input::get('amount');
 
-        if(empty($dividend->win)) {
+        if (empty($dividend->win))
+        {
             $dividend->win = 0;
         }
 
-        if( $dividend->save() )
+        if ($dividend->save())
         {
             Flash::success('Utdelningen uppdaterades');
         } else
