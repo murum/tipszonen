@@ -1,11 +1,8 @@
 {
-  "name": "tipszonen",
-  "dependencies": {
-    "jquery": "~2.1.1",
-    "chart.js": "~0.1.0",
-    "bootstrap": "~3.1.1"
-  },
-  "devDependencies": {
-    "fontawesome": "~4.1.0"
-  }
+    "name": "tipszonen",
+    "dependencies": {
+        "jquery": "~2.1.1",
+        "bootstrap": "~3.1.1",
+        "fontawesome": "~4.1.0"
+    }
 }

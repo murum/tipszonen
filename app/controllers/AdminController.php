@@ -112,6 +112,10 @@ class AdminController extends BaseController {
         $dividend->win = Input::get('win');
         $dividend->amount = Input::get('amount');
 
+        if(empty($dividend->win)) {
+            $dividend->win = 0;
+        }
+
         if( $dividend->save() )
         {
             Flash::success('Utdelningen uppdaterades');

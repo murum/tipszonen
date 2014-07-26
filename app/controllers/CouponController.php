@@ -1,6 +1,12 @@
 <?php
 
+/**
+ * Class CouponController
+ */
 class CouponController extends BaseController {
+    /**
+     *
+     */
     public function __construct()
     {
         ignore_user_abort(true);
@@ -9,6 +15,9 @@ class CouponController extends BaseController {
         CouponDetail::createDividends();
     }
 
+    /**
+     * @return mixed
+     */
     public function index()
     {
         $products = Product::all();
@@ -24,6 +33,9 @@ class CouponController extends BaseController {
         return View::make('coupon.index', compact('products', 'recent_coupons', 'user'));
     }
 
+    /**
+     * @return mixed
+     */
     public function search()
     {
         $query = Input::get('search');
@@ -38,6 +50,11 @@ class CouponController extends BaseController {
         return View::make('coupon.search', compact('coupons', 'query'));
     }
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     */
     public function show($id)
     {
         $row_amount_to_show = 8;
@@ -59,6 +76,11 @@ class CouponController extends BaseController {
         return  View::make('coupon.show', compact('coupon', 'dividends', 'best_rows', 'win'));
     }
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     */
     public function show_update($id)
     {
         $row_amount_to_show = 8;
@@ -80,6 +102,11 @@ class CouponController extends BaseController {
         return  View::make('coupon.show_update', compact('coupon', 'dividends', 'best_rows', 'win'));
     }
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     */
     public function create($id)
     {
         $coupon = CouponDetail::with('matches')->whereProductId($id)->get()->last();
@@ -93,6 +120,11 @@ class CouponController extends BaseController {
         return View::make('coupon.create', compact('coupon'));
     }
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     */
     public function store($id)
     {
         $coupon = new Coupon;
@@ -165,6 +197,9 @@ class CouponController extends BaseController {
             ->with('svs_button', $svs_activated);
     }
 
+    /**
+     * @return mixed
+     */
     public function create_own_file()
     {
         foreach(Product::all() as $product)
@@ -175,6 +210,9 @@ class CouponController extends BaseController {
         return View::make('coupon.create_from_file');
     }
 
+    /**
+     * @return mixed
+     */
     public function store_own_file()
     {
         if (Input::hasFile('own_file') && Input::file('own_file')->isValid())
@@ -230,11 +268,17 @@ class CouponController extends BaseController {
         }
     }
 
+    /**
+     * @return mixed
+     */
     public function create_own_file_completed()
     {
         return View::make('coupon.completed_from_file');
     }
 
+    /**
+     * @return mixed
+     */
     public function deletedOne()
     {
         if (!$coupon->_create_new(1))
