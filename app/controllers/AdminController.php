@@ -92,26 +92,30 @@ class AdminController extends BaseController {
     public function post_coupon_score($id)
     {
         $match = Match::find($id);
-        $match->time = Input::get('time');
-        $match->home_score = Input::get('home_score');
-        $match->away_score = Input::get('away_score');
-        $match->ended = Input::get('ended');
 
-        // if the model is not changed
-        if ( $match->home_score != $match->getOriginal()['home_score']
-            || $match->away_score != $match->getOriginal()['away_score']
-            || $match->time != $match->getOriginal()['time'] )
-        {
-            $match->match_updated = new DateTime();
+        $matches = Match::
+            where('home_team', '=', $match->home_team)
+            ->where('away_team', '=', $match->away_team)
+            ->get();
+
+        foreach($matches as $match) {
+            $match->time = Input::get('time');
+            $match->home_score = Input::get('home_score');
+            $match->away_score = Input::get('away_score');
+            $match->ended = Input::get('ended');
+
+            // if the model is not changed
+            if ( $match->home_score != $match->getOriginal()['home_score']
+                || $match->away_score != $match->getOriginal()['away_score']
+                || $match->time != $match->getOriginal()['time'] )
+            {
+                $match->match_updated = new DateTime();
+            }
+
+            $match->save();
         }
 
-        if ($match->save())
-        {
-            Flash::success('Matchen uppdaterades');
-        } else
-        {
-            Flash::error('Någonting gick fel vid uppdateringen, vänligen försök igen... (kanske uppdaterade du inte tiden)');
-        }
+        Flash::success('Matchen uppdaterades');
 
         return Redirect::back();
     }
