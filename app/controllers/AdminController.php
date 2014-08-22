@@ -106,9 +106,7 @@ class AdminController extends BaseController {
             $match->ended = Input::get('ended');
 
             // if the model is not changed
-            if ( $match->home_score != $match->getOriginal()['home_score']
-                || $match->away_score != $match->getOriginal()['away_score']
-                || $match->time != $match->getOriginal()['time'] )
+            if ( $match->time != $match->getOriginal()['time'] )
             {
                 $match->match_updated = new DateTime();
             }

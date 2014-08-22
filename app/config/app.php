@@ -13,7 +13,7 @@ return array(
 	|
 	*/
 
-	'debug' => true,
+	'debug' => false,
     'affiliate_id' => '1752943',
 
 	/*
