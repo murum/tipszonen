@@ -49,7 +49,7 @@
                 </th>
                 @endforeach
                 <th class="text-right">Rätt</th>
-                <th class="text-right">Kan få</th>
+                {{-- <th class="text-right">Kan få</th> --}}
             </tr>
             </thead>
             <tbody>
@@ -68,7 +68,7 @@
                 </td>
                 @endforeach
                 <td align="right">{{ $row['rights'] }}</td>
-                <td align="right">{{ $row['potential'] }}</td>
+                {{-- <td align="right">{{ $row['potential'] }}</td>--}}
             </tr>
             @endforeach
             </tbody>
