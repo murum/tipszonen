@@ -12,7 +12,7 @@
     </thead>
     <tbody>
     @foreach($coupon->coupon_detail->matches as $match)
-    <tr class="match match-{{ $match->get_match_status() }}">
+    <tr class="match match-{{ $match->get_match_status() }} {{ ($match->has_new_action()) ? 'match-new-action' : '' }}">
         <td>{{ $match->matchnumber }}</td>
         <td>{{ $match->formated_start() }}</td>
         <td>{{ $match->home_team }}</td>

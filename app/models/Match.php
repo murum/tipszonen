@@ -121,7 +121,7 @@ class Match extends Eloquent {
      */
     public function get_match_time()
     {
-        $updated = isset($this->match_updated) ? strtotime($this->match_updated) : strtotime($this->updated_at);
+        $updated = isset($this->time_updated) ? strtotime($this->time_updated) : strtotime($this->updated_at);
         $now = new DateTime();
         $now_time = strtotime($now->format('Y-m-d H:i:s'));
 
@@ -148,5 +148,19 @@ class Match extends Eloquent {
         }
 
         return (int) ($calculated_time + $this->time);
+    }
+
+    public function has_new_action() {
+        $notify_minutes = 1;
+        $updated = strtotime($this->match_updated);
+        $now = new DateTime();
+        $now_time = strtotime($now->format('Y-m-d H:i:s'));
+
+        $calculated_time = round(($now_time - $updated) / 60, 0);
+
+        if($calculated_time <= $notify_minutes) {
+            return true;
+        }
+        return false;
     }
 }

@@ -54,3 +54,16 @@
 .match-help-on_going {
   color: @brand-success;
 }
+
+.match-new-action {
+  -webkit-animation: new-action 5s infinite; /* Chrome, Safari, Opera */
+  animation: new-action 5s infinite;
+}
+
+@-webkit-keyframes new-action {
+  0% {background: lighten(@brand-success, 20%); }
+  25% {background: #fff; }
+  50% {background: lighten(@brand-success, 20%); }
+  75% {background: #fff; }
+  100% {background: lighten(@brand-success, 20%); }
+}

@@ -108,6 +108,12 @@ class AdminController extends BaseController {
             // if the model is not changed
             if ( $match->time != $match->getOriginal()['time'] )
             {
+                $match->time_updated = new DateTime();
+            }
+
+            if ( $match->home_score != $match->getOriginal()['home_score']
+                || $match->away_score != $match->getOriginal()['away_score']
+            ) {
                 $match->match_updated = new DateTime();
             }
 
