@@ -13,7 +13,7 @@ return array(
 	|
 	*/
 
-	'debug' => false,
+	'debug' => true,
     'affiliate_id' => '1752943',
 
 	/*
@@ -27,7 +27,7 @@ return array(
 	|
 	*/
 
-	'url' => 'http://tipszonen.se',
+	'url' => 'http://lajvrattning.se',
 
 	/*
 	|--------------------------------------------------------------------------

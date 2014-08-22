@@ -37,7 +37,6 @@ $env = $app->detectEnvironment(function()
     if (strlen($environment) === 0) {
         $environment = 'local';
     }
-
     return $environment;
 
 });
