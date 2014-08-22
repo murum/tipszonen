@@ -11,9 +11,11 @@
 |
 */
 
-App::before(function ($request)
+App::before(function($request)
 {
-    //
+    Common::globalXssClean();
+
+    Common::checkUserAgent();
 });
 
 
