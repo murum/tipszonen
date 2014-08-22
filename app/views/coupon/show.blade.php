@@ -8,7 +8,7 @@
         </div>
         <div class="col-xs-12 col-xs-4">
             <label for="share-link">Dela kupongen till dina vänner</label>
-            <input type="text" id="share-link" class="form-control" disabled value="{{ Request::url() }}" />
+            <input type="text" id="share-link" class="form-control" readonly value="{{ Request::url() }}" />
             <label for="no-sound">Stäng av ljud</label>
             <input type="checkbox" id="no-sound"/>
         </div>
