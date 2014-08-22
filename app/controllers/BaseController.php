@@ -13,6 +13,8 @@ class BaseController extends Controller {
 		{
 			$this->layout = View::make($this->layout);
 		}
+
+		var_dump(App::environment());
 	}
 
 }

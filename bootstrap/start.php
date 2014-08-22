@@ -28,9 +28,9 @@ $env = $app->detectEnvironment(function()
 {
     $environment = getenv('APP_ENV');
     if (strlen($environment) === 0) {
-        if (strpos(__DIR__, '/home/forge/' . 'dev.tipszonen.se') === 0) {
-            $environment = 'development';
-        } elseif (strpos(__DIR__, '/home/forge/tipszonen.se') === 0) {
+        if (strpos(__DIR__, '/home/forge/' . 'dev.lajvrattning.se') === 0) {
+            $environment = 'dev';
+        } elseif (strpos(__DIR__, '/home/forge/' . 'lajvrattning.se') === 0) {
             $environment = 'production';
         }
     }

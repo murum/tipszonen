@@ -14,6 +14,6 @@ return array(
     */
 
     'debug' => true,
-    'url' => 'http://dev.tipszonen.se',
+    'url' => 'http://dev.lajvrattning.se',
 
 );
