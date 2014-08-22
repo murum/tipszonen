@@ -150,13 +150,31 @@ class Match extends Eloquent {
         return (int) ($calculated_time + $this->time);
     }
 
-    public function has_new_action() {
+    public function has_new_action()
+    {
         $notify_minutes = 1;
         $updated = strtotime($this->match_updated);
         $now = new DateTime();
         $now_time = strtotime($now->format('Y-m-d H:i:s'));
 
         $calculated_time = round(($now_time - $updated) / 60, 0);
+
+        if ($calculated_time <= $notify_minutes)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+
+    public function has_new_sound_action() {
+        $notify_minutes = 0.34;
+        $updated = strtotime($this->match_updated);
+        $now = new DateTime();
+        $now_time = strtotime($now->format('Y-m-d H:i:s'));
+
+        $calculated_time = round(($now_time - $updated) / 60, 2);
 
         if($calculated_time <= $notify_minutes) {
             return true;

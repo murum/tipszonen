@@ -16,8 +16,8 @@ Route::get('registrera-dig', array('as' => 'register', 'before' => 'auth.guest',
 
 
 Route::get('kuponger', array('as' => 'coupon', 'before' => 'auth', 'uses' => 'CouponController@index'));
-Route::get('kuponger/{id}', array('as' => 'coupon.show', 'before' => 'auth', 'uses' => 'CouponController@show'));
-Route::get('kuponger/{id}/uppdatering', array('as' => 'coupon.show_update', 'before' => 'auth', 'uses' => 'CouponController@show_update'));
+Route::get('kuponger/{id}', array('as' => 'coupon.show', 'uses' => 'CouponController@show'));
+Route::get('kuponger/{id}/uppdatering', array('as' => 'coupon.show_update', 'uses' => 'CouponController@show_update'));
 Route::get('skapa-kupong/{id}', array('as' => 'coupon.new', 'uses' => 'CouponController@create'));
 Route::post('skapa-kupong/{id}', array('as' => 'coupon.store', 'uses' => 'CouponController@store'));
 Route::get('skapa-kupong/egna-filer', array('as' => 'own_files', 'before' => 'auth', 'uses' => 'CouponController@create_own_file'));
