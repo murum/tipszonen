@@ -129,7 +129,7 @@ class AdminController extends BaseController {
     {
         $dividend = CouponDividend::find($id);
         $dividend->win = Input::get('win');
-        $dividend->amount = Input::get('amount');
+        $dividend->amount = 0;
 
         if (empty($dividend->win))
         {
@@ -144,6 +144,6 @@ class AdminController extends BaseController {
             Flash::error('Någonting gick fel vid uppdateringen, vänligen försök igen');
         }
 
-        return Response::json(['success' => true]);
+        return Redirect::back();
     }
 }

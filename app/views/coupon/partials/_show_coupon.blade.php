@@ -85,8 +85,7 @@
         <table class="table">
             <thead>
             <tr>
-                <th>Totalt antal</th>
-                <th>Din kupong</th>
+                <th>Antal</th>
                 <th>Rätt</th>
                 <th>Vinst</th>
             </tr>
@@ -94,7 +93,6 @@
             <tbody>
                 @foreach($coupon->coupon_detail->dividends as $dividend)
                 <tr>
-                    <td>{{ number_format($dividend->amount, 0, '.', '.') }} st</td>
                     <td>{{ $coupon->get_rows_from_rights($dividend->rights) }} st</td>
                     <td>{{ $dividend->rights }} rätt</td>
                     <td>{{ number_format($dividend->win, 0, '.', '.') }} kr</td>

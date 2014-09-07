@@ -21,7 +21,7 @@
 
 <div class="hidden-xs coupon-headers">
     <div class="row">
-        <div class="col-sm-offset-6 col-sm-3 text-center">
+        <div class="col-sm-offset-7 col-sm-3 text-center">
             <div class="col-xs-4">1</div>
             <div class="col-xs-4">X</div>
             <div class="col-xs-4">2</div>
@@ -32,6 +32,9 @@
     @foreach($coupon->matches as $match)
     <li class="list-group-item">
         <div class="row">
+            <div class="col-xs-1">
+                {{ $match->matchnumber }}
+            </div>
             <div class="col-xs-12 col-sm-6">
                 <div class="col-xs-4">
                     {{ $match->home_team }}

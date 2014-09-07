@@ -57,9 +57,6 @@
                 <div class="col-xs-12 col-sm-3">
                     <h4>Vinst</h4>
                 </div>
-                <div class="col-xs-12 col-sm-3">
-                    <h4>Totalt antal rader</h4>
-                </div>
             </div>
         </li>
 
@@ -78,13 +75,6 @@
                         <div class="input-group">
                             {{ Form::text('win', null, ['class' => 'form-control']) }}
                             <div class="input-group-addon">kr</div>
-                        </div>
-                    </div>
-
-                    <div class="col-xs-12 col-sm-3">
-                        <div class="input-group">
-                            {{ Form::text('amount', null, ['class' => 'form-control']) }}
-                            <div class="input-group-addon">st</div>
                         </div>
                     </div>
 
