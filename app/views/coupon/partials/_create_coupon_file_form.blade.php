@@ -11,11 +11,15 @@
 <div class="form-group">
     <div class="col-xs-12">
         {{ Form::label('svs_card', 'Spelkortsnummer', ['class' => 'control-label']) }}
-        @if( isset(Auth::user()->svs_card) )
-        {{ Form::text('svs_card', Auth::user()->svs_card, ['class' => 'form-control', 'readonly' => true]) }}
+        @if(Auth::user())
+            @if( isset(Auth::user()->svs_card) )
+                {{ Form::text('svs_card', Auth::user()->svs_card, ['class' => 'form-control', 'readonly' => true]) }}
+            @else
+                {{ Form::text('svs_card', null, ['class' => 'form-control']) }}
+                <span class="help-block">Du kan lägga till ditt spelkortsnummer genom din {{ link_to_route('member.edit', 'profil', Auth::user()->id ) }} för att slippa skriva in det varje gång du skapar en ny kupong.</span>
+            @endif
         @else
-        {{ Form::text('svs_card', null, ['class' => 'form-control']) }}
-        <span class="help-block">Du kan lägga till ditt spelkortsnummer genom din {{ link_to_route('member.edit', 'profil', Auth::user()->id ) }} för att slippa skriva in det varje gång du skapar en ny kupong.</span>
+            {{ Form::text('svs_card', null, ['class' => 'form-control']) }}
         @endif
     </div>
 </div>

@@ -139,7 +139,11 @@ class CouponController extends BaseController {
         $user = Auth::user();
 
         $coupon->coupon_detail_id = $coupon_detail->id;
-        $coupon->user_id = $user->id;
+        if(isset($user)) 
+        {
+            $coupon->user_id = $user->id;
+        }
+        
         $coupon->name = Input::get('name');
 
         foreach($coupon_detail->matches as $match)
@@ -225,7 +229,10 @@ class CouponController extends BaseController {
                 $user = Auth::user();
 
                 $coupon->coupon_detail_id = $coupon_detail->id;
-                $coupon->user_id = $user->id;
+                if($user)
+                {
+                    $coupon->user_id = $user->id;
+                }
                 $coupon->name = Input::get('name');
 
                 // Set tile file url and move the file.

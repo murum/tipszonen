@@ -24,18 +24,20 @@
             <h3>Hitta kupong</h3>
             @include('coupon/partials/_search_coupon')
 
-            <h3>Dina senaste kuponger</h3>
-            <div class="list-group">
-                @if( $user->hasCoupons() )
-                    @foreach($user->coupons as $coupon)
-                        @include('coupon/partials/_coupon')
-                    @endforeach
-                @else
-                    <div class="alert alert-info">
-                        Du har inte skapat några kuponger.
-                    </div>
-                @endif
-            </div>
+            @if(Auth::user())
+                <h3>Dina senaste kuponger</h3>
+                <div class="list-group">
+                    @if( $user->hasCoupons() )
+                        @foreach($user->coupons as $coupon)
+                            @include('coupon/partials/_coupon')
+                        @endforeach
+                    @else
+                        <div class="alert alert-info">
+                            Du har inte skapat några kuponger.
+                        </div>
+                    @endif
+                </div>
+            @endif
 
             <h3>Senaste kupongerna</h3>
             <div class="list-group">
