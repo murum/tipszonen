@@ -3,7 +3,7 @@
 // Route Patterns
 Route::pattern('id', '[0-9]+');
 
-Route::get('/', array('as' => 'home', 'uses' => 'HomeController@index'));
+Route::get('/', array('as' => 'home', 'uses' => 'CouponController@index'));
 
 Route::resource('sessions', 'SessionsController', array( 'only' => array( 'create', 'store', 'destroy' ) ) );
 Route::get('logga-in', array('as' => 'login', 'before' => 'auth.guest', 'uses' => 'SessionsController@create'));
