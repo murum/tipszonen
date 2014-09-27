@@ -2,7 +2,7 @@
 <html lang="sv">
 <head>
     <meta charset="UTF-8">
-    <title>Tipszonen.se</title>
+    <title>Liverättning Svenskapspel - Lajvrättning.se</title>
     {{ HTML::style('/css/main.css') }}
 </head>
 <body>
