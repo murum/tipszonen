@@ -128,7 +128,7 @@ class AdminController extends BaseController {
     public function post_coupon_dividend($id)
     {
         $dividend = CouponDividend::find($id);
-        $dividend->win = Input::get('win');
+        $dividend->win = preg_replace('/\s+/', '', Input::get('win'));
         $dividend->amount = 0;
 
         if (empty($dividend->win))

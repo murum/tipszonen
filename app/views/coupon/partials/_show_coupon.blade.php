@@ -95,7 +95,7 @@
                 <tr>
                     <td>{{ $coupon->get_rows_from_rights($dividend->rights) }} st</td>
                     <td>{{ $dividend->rights }} rätt</td>
-                    <td>{{ number_format(trim($dividend->win), 0, '.', '.') }} kr</td>
+                    <td>{{ number_format(preg_replace('/\s+/', '', $dividend->win), 0, '.', '.') }} kr</td>
                 </tr>
                 @endforeach
             </tbody>
