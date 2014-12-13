@@ -13,6 +13,33 @@ class AdminController extends BaseController {
         );
     }
 
+    public function get_coupons()
+    {
+        $coupons = Coupon::orderBy('created_at', 'desc')->get();
+
+        return View::make(
+            'admin.user_coupons',
+            compact(
+                'coupons'
+            )
+        );
+    }
+
+    public function get_remove_coupon($id)
+    {
+        $coupon = Coupon::find($id);
+
+        if ($coupon::destroy($id))
+        {
+            Flash::success('Kupongen togs bort');
+        } else
+        {
+            Flash::error('Någonting gick fel, Kupongen togs inte bort');
+        }
+
+        return Redirect::back();
+    }
+
     public function get_users()
     {
         $users = User::with('roles')->get();

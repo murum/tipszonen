@@ -10,7 +10,7 @@ class CouponController extends BaseController {
     public function __construct()
     {
         ignore_user_abort(true);
-        set_time_limit(240);
+        set_time_limit(0);
 
         CouponDetail::createDividends();
     }

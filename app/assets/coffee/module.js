@@ -9,9 +9,16 @@ $(function () {
     var changeRowNumbers, couponId, couponMatches, couponWrapper, interval, rowNumbers, secondsToUpdate, submitButton, textContainer, that;
     $("a.user-remove").on("click", function () {
         if (!confirm("Är du säker på att du vill ta bort den här användaren?")) {
-            false;
+            return false;
         }
     });
+
+    $("a.coupon-remove").on("click", function () {
+        if (!confirm("Är du säker på att du vill ta bort den här kupongen?")) {
+            return false;
+        }
+    });
+
     couponWrapper = $("#coupon-wrapper");
     if ($(couponWrapper).length) {
         couponId = couponWrapper.data('id');

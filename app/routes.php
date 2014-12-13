@@ -35,6 +35,8 @@ Route::post('medlemmar/{id}/redigera', array('as' => 'member.update', 'uses' => 
 
 // Admin
 Route::get('admin', array('as' => 'admin', 'before' => 'auth|auth.is_admin', 'uses' => 'AdminController@index'));
+Route::get('admin/kuponger', array('as' => 'admin.coupon', 'before' => 'auth|auth.is_admin', 'uses' => 'AdminController@get_coupons'));
+Route::get('admin/kuponger/{id}/ta-bort', array('as' => 'admin.coupon.get_remove', 'before' => 'auth|auth.is_admin', 'uses' => 'AdminController@get_remove_coupon'));
 Route::get('admin/medlemmar', array('as' => 'admin.users', 'before' => 'auth|auth.is_admin', 'uses' => 'AdminController@get_users'));
 Route::get('admin/medlemmar/{id}', array('as' => 'admin.users.get_single', 'before' => 'auth|auth.is_admin', 'uses' => 'AdminController@get_user'));
 Route::get('admin/medlemmar/{id}/ta-bort', array('as' => 'admin.users.get_remove', 'before' => 'auth|auth.is_admin', 'uses' => 'AdminController@get_remove_user'));

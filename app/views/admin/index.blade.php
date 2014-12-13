@@ -4,9 +4,10 @@
 <h1>Adminpanel</h1>
     {{ link_to_route('admin.liverattning', 'Kuponger', null, ['class' => 'btn btn-lg btn-success']) }}
     {{ link_to_route('admin.users', 'Medlemmar', null, ['class' => 'btn btn-lg btn-success']) }}
+    {{ link_to_route('admin.coupon', 'Medlemskuponger', null, ['class' => 'btn btn-lg btn-success']) }}
 
     {{-- OM DET FINNS NÅGRA PÅGÅENDE OMGÅNGAR--}}
-    @if(count($ongoing_coupons) > 0)
+    @if(isset($ongoing_coupons) && count($ongoing_coupons) > 0)
         <h2>Pågående omgångar</h2>
         <ul class="list-group">
             @foreach($ongoing_coupons as $coupon)
