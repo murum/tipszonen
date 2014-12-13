@@ -158,6 +158,7 @@ class CouponController extends BaseController {
         }
         foreach($matches as $match_number => $bet)
         {
+
             $match_bets[] = [
                 'match_number' => $match_number,
                 'bet' => Bet::get_bet($bet)

@@ -72,8 +72,27 @@ class Bet {
                 $current_row .= $bet;
                 if(strlen($current_row) == $row_length)
                 {
-                    $current_row = hyphenate(',', $current_row, 1);
-                    self::$rows[] = $current_row;
+                    $current_row_new = hyphenate(',', $current_row, 1);
+                    self::$rows[] = $current_row_new;
+                }
+                if(strlen($current_row) == $row_length+1) {
+                    $current_row_array = str_split($current_row, 1);
+                    unset($current_row_array[$row_length-1]);
+
+                    $current_row_new_string = implode($current_row_array);
+                    $current_row_new = hyphenate(',', $current_row_new_string, 1);
+
+                    self::$rows[] = $current_row_new;
+                }
+                if(strlen($current_row) == $row_length+2) {
+                    $current_row_array = str_split($current_row, 1);
+                    unset($current_row_array[$row_length-1]);
+                    unset($current_row_array[$row_length]);
+
+                    $current_row_new_string = implode($current_row_array);
+                    $current_row_new = hyphenate(',', $current_row_new_string, 1);
+
+                    self::$rows[] = $current_row_new;
                 }
             }
             return self::$rows;
