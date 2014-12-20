@@ -331,7 +331,7 @@ class Coupon extends BaseModel {
             foreach ($this->coupon_rows->toArray() as $row)
             {
                 $rows = trim(str_replace(',', '', $row['row']));
-                if (self::get_rights($row_result, $row) == $rights)
+                if (self::get_rights($row_result, $rows) == $rights)
                 {
                     $amount_rows[] = [
                         'row' => $row,
