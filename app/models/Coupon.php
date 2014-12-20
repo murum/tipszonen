@@ -121,6 +121,7 @@ class Coupon extends BaseModel {
         {
             $rows_to_return[$i]['row'] = $this->get_best_row_detail($rows_to_return[$i]['row'], $results_string);
         }
+        var_dump($total_win);
 
         return [$rows_to_return, $total_win];
     }
