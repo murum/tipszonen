@@ -92,6 +92,7 @@ class Coupon extends BaseModel {
                     'potential' => ($rights + $potential),
                     'win'       => $win
                 ];
+                $total_win += $win;
             }
         } else
         {
